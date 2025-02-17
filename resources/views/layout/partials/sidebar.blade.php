@@ -1,0 +1,47 @@
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-inner slimscroll">
+        <div id="sidebar-menu" class="sidebar-menu">
+            <ul>
+                {{-- user management --}}
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">User Management</h6>
+                    <ul>
+                        <li class="{{ Request::is('users') ? 'active' : '' }}"><a href="{{ url('users') }}"><i
+                                    data-feather="user-check"></i><span>Users</span></a>
+                        </li>
+                        <li class="{{ Request::is('roles-permissions','permissions') ? 'active' : '' }}"><a
+                                href="{{ url('roles-permissions') }}"><i data-feather="shield"></i><span>Roles &
+                                    Permissions</span></a></li>
+                    </ul>
+                </li>
+
+                {{-- setting --}}
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">Settings</h6>
+                    <ul>
+                        <li class="submenu">
+                            <a href="javascript:void(0);"
+                                class="{{ Request::is('general-settings', 'security-settings', 'notification', 'connected-apps') ? 'active subdrop' : '' }}"><i
+                                    data-feather="settings"></i><span>General
+                                    Settings</span><span class="menu-arrow"></span></a>
+                            <ul>
+                                <li><a href="{{ url('general-settings') }}"
+                                        class="{{ Request::is('general-settings') ? 'active' : '' }}">Profile</a>
+                                </li>
+                                <li><a href="{{ url('security-settings') }}"
+                                        class="{{ Request::is('security-settings') ? 'active' : '' }}">Security</a>
+                                </li>
+                                {{-- add new here --}}
+                            </ul>
+                        </li>
+                        <li class="{{ Request::is('signin') ? 'active' : '' }}">
+                            <a href="{{ url('signin') }}"><i data-feather="log-out"></i><span>Logout</span> </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- /Sidebar -->
