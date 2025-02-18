@@ -7,11 +7,11 @@
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">User Management</h6>
                     <ul>
-                        <li class="{{ Request::is('users') ? 'active' : '' }}"><a href="{{ url('users') }}"><i
+                        <li class="{{ Request::is('users') ? 'active' : '' }}"><a href="{{ route('users.index') }}"><i
                                     data-feather="user-check"></i><span>Users</span></a>
                         </li>
-                        <li class="{{ Request::is('roles-permissions','permissions') ? 'active' : '' }}"><a
-                                href="{{ url('roles-permissions') }}"><i data-feather="shield"></i><span>Roles &
+                        <li class="{{ Request::is('roles') ? 'active' : '' }}"><a
+                                href="{{ route('roles.index') }}"><i data-feather="shield"></i><span>Roles &
                                     Permissions</span></a></li>
                     </ul>
                 </li>
@@ -35,9 +35,13 @@
                                 {{-- add new here --}}
                             </ul>
                         </li>
-                        <li class="{{ Request::is('signin') ? 'active' : '' }}">
-                            <a href="{{ url('signin') }}"><i data-feather="log-out"></i><span>Logout</span> </a>
-                        </li>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <li class="{{ Request::is('signin') ? 'active' : '' }}">
+                                <a href="#" onclick="event.preventDefault();
+                                        this.closest('form').submit();"><i data-feather="log-out"></i><span>Logout</span> </a>
+                            </li>
+                        </form>
                     </ul>
                 </li>
             </ul>

@@ -4,7 +4,7 @@
     <!-- Logo -->
     <div class="header-left active">
         <a href="{{ url('index') }}" class="logo logo-normal">
-            <img src="{{ URL::asset('/build/img/logo.png') }}" alt="">
+            <img src="{{ URL::asset('build/icons/main_logo.jpg') }}" alt="">
         </a>
         <a href="{{ url('index') }}" class="logo logo-white">
             <img src="{{ URL::asset('/build/img/logo-white.png') }}" alt="">
@@ -231,9 +231,13 @@
                     <a class="dropdown-item" href="{{ url('general-settings') }}"><i class="me-2"
                             data-feather="settings"></i>Settings</a>
                     <hr class="m-0">
-                    <a class="dropdown-item logout pb-0" href="{{ url('signin') }}"><img
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                    <a class="dropdown-item logout pb-0" href="#" onclick="event.preventDefault();
+                                        this.closest('form').submit();"><img
                             src="{{ URL::asset('/build/img/icons/log-out.svg') }}" class="me-2"
                             alt="img">Logout</a>
+                    </form>
                 </div>
             </div>
         </li>

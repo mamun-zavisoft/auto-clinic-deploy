@@ -6,20 +6,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Modules\RolePermission\Traits\RolePermission;
+use Illuminate\Support\Facades\Cache;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, RolePermission;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
+
+    protected $guard_name = 'admin';
+
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
     ];
 
@@ -44,5 +50,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function hasPermission($permissionName)
+    {
+        $permissions = Cache::remember('user_permissions' . $this->id, now()->addMonths(5), function () {
+            return $this->getAllPermissions()->pluck('name')->toArray();
+        });
+        return in_array($permissionName, $permissions);
     }
 }

@@ -1,0 +1,126 @@
+<?php
+
+namespace App\Modules\RolePermission\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Modules\RolePermission\Requests\UserRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Contracts\Role as ContractsRole;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+
+class UserController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('permission:user-create')->only('create', 'store');
+
+    }
+
+    public function index(Request $request)
+    {
+        $users = User::paginate();
+
+        return view('RolePermission::users.index', compact('users'));
+    }
+
+    public function create()
+    {
+        $roles = Role::get();
+        $groupedPermissions = Permission::select('group_name', 'id', 'name')
+            ->orderBy('group_name')->get()->groupBy('group_name');
+
+        return view('RolePermission::users.create', compact('roles', 'groupedPermissions'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|unique:users,phone',
+            'password' => 'required|min:8',
+            'role_id' => 'required',
+        ]);
+
+        DB::transaction(function () use ($request) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => Hash::make($request->password),
+                'role' => '2', // change accordingly to your default role
+            ]);
+            
+            $role = Role::find($request->role_id);
+
+            if ($user) {
+                $user->assignRoleToUser($role);
+            }
+            if (isset($request->permissions)) {
+                $user->syncPermissions($request->permissions);
+            }
+
+            return $user->save();
+        });
+
+        return redirect()->route('users.index')->with('success', 'User created successfully');
+    }
+
+    public function edit($id)
+    {
+        $roles = Role::get();
+        $user = User::findOrFail($id);
+
+        $groupedPermissions = Permission::select('group_name', 'id', 'name')
+            ->orderBy('group_name')->get()->groupBy('group_name');
+
+        return view('RolePermission::users.edit', compact('user', 'roles', 'groupedPermissions'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$id,
+            'phone' => 'required|unique:users,phone,'.$id,
+            'role_id' => 'required',
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+        ]);
+
+        $role = Role::findOrFail($request->role_id);
+        if ($user) {
+            $user->syncRoles($role);
+        }
+
+        if (isset($request->permissions)) {
+            $user->permissions()->detach();
+            $user->assignPermissionToUser($request->permissions);
+        } else {
+            $user->permissions()->detach();
+        }
+        Cache::forget('user_permissions'.$user->id);
+
+        $user->save();
+
+        return redirect()->route('users.index')->with('success', 'User updated successfully');
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('users.index')->with('success', 'User deleted successfully');
+    }
+}
