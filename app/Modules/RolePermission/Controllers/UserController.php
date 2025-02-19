@@ -22,9 +22,10 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $users = User::paginate();
+        $users = User::orderBy('id', 'DESC')->paginate(10);
+        $roles = Role::select('id', 'name')->get();
 
-        return view('backend.users.index', compact('users'));
+        return view('backend.users.index', compact('users', 'roles'));
     }
 
     public function create()
@@ -33,7 +34,7 @@ class UserController extends Controller
         $groupedPermissions = Permission::select('group_name', 'id', 'name')
             ->orderBy('group_name')->get()->groupBy('group_name');
 
-        return view('RolePermission::users.create', compact('roles', 'groupedPermissions'));
+        return view('backend.users.create', compact('roles', 'groupedPermissions'));
     }
 
     public function store(Request $request)

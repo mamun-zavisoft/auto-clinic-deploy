@@ -15,7 +15,7 @@ class RoleController extends Controller
     {
         $roles = Role::with('permissions')->get();
 
-        return view('RolePermission::roles.index', compact('roles'));
+        return view('backend.roles.index', compact('roles'));
     }
 
     public function create()
@@ -23,7 +23,7 @@ class RoleController extends Controller
         $groupedPermissions = Permission::select('group_name', 'id', 'name')
             ->orderBy('group_name')->get()->groupBy('group_name');
 
-        return view('RolePermission::roles.create', compact('groupedPermissions'));
+        return view('backend.roles.create', compact('groupedPermissions'));
     }
 
     public function store(Request $request)
@@ -47,7 +47,7 @@ class RoleController extends Controller
         $groupedPermissions = Permission::select('group_name', 'id', 'name')
             ->orderBy('group_name')->get()->groupBy('group_name');
 
-        return view('RolePermission::roles.edit', compact('role', 'groupedPermissions'));
+        return view('backend.roles.edit', compact('role', 'groupedPermissions'));
     }
 
     public function update(Request $request, Role $role)
@@ -67,7 +67,7 @@ class RoleController extends Controller
 
         // Reset permissions for all users with this role
         $users = $role->users;
-        
+
         foreach ($users as $user) {
             Cache::forget('user_permissions' . $user->id);
         }
@@ -75,14 +75,18 @@ class RoleController extends Controller
         return redirect()->route('roles.index')->with('success', 'Role updated successfully.');
     }
 
-    public function destroy(Role $role)
+    public function destroy($id)
     {
-        if ($role->users()->count() > 0) {
-            return redirect()->route('roles.index')->with('error', 'Cannot delete this role because users are assigned to it.');
+        $role = Role::findOrFail($id);
+        $role->load('users');
+        if ($role->users->count() > 0) {
+            return redirect()->route('roles.index')
+            ->with('error', 'Cannot delete this role because users are assigned to it.');
         }
-
+        
         $role->delete();
 
-        return redirect()->route('roles.index')->with('success', 'Role deleted successfully.');
+        return redirect()->route('roles.index')
+            ->with('success', 'Role deleted successfully.');
     }
 }

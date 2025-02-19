@@ -3,17 +3,9 @@
 @section('content')
     <div class="page-wrapper">
         <div class="content">
-            @component('components.breadcrumb')
-                @slot('title')
-                    User List
-                @endslot
-                @slot('li_1')
-                    Manage Your Users
-                @endslot
-                @slot('li_2')
-                    Add New User
-                @endslot
-            @endcomponent
+            
+            <x-breadcrumb title="User List" sub-title="Manage Your Users" button="Add New User" button-route="users.create" />
+
 
             <!-- /product list -->
             <div class="card table-list-card">
@@ -51,8 +43,9 @@
                                         <i data-feather="user" class="info-img"></i>
                                         <select class="select">
                                             <option>Choose Name</option>
-                                            <option>Lilly</option>
-                                            <option>Benjamin</option>
+                                            @foreach ($users as $user)
+                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -71,8 +64,9 @@
                                         <i data-feather="zap" class="info-img"></i>
                                         <select class="select">
                                             <option>Choose Role</option>
-                                            <option>Store Keeper</option>
-                                            <option>Salesman</option>
+                                            @foreach ($roles as $role)
+                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -101,7 +95,7 @@
                                     <th>email</th>
                                     <th>Role</th>
                                     <th>Permissions</th>
-                                    <th>Status</th>
+                                    {{-- <th>Status</th> --}}
                                     <th class="no-sort">Action</th>
                                 </tr>
                             </thead>
@@ -128,7 +122,7 @@
                                         </td>
                                         <td>{{ $user->phone }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>Admin</td>
+                                        <td>{{ $user->roles?->pluck('name')?->implode(', ') }}</td>
                                         <td>
                                             @php
                                                 $permissions = $user->permissions
@@ -145,7 +139,7 @@
                                                 @endforeach
                                             </div>
                                         </td>
-                                        <td><span class="badge badge-linedanger">Inactive</span></td>
+                                        {{-- <td><span class="badge badge-linedanger">Inactive</span></td> --}}
                                         <td class="action-table-data">
                                             <div class="edit-delete-action">
                                                 {{-- <a class="me-2 p-2 mb-0" href="javascript:void(0);">
