@@ -50,8 +50,6 @@
 </div>
 <!-- /Main Wrapper -->
 @include('layout.partials.theme-settings')
-@component('components.modalpopup')
-@endcomponent
 @include('layout.partials.footer-scripts')
 
 @stack('scripts')
