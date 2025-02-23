@@ -52,9 +52,13 @@
                                                     data-bs-target="#edit-brand-{{ $brand->id }}">
                                                     <i data-feather="edit" class="feather-edit"></i>
                                                 </a>
-                                                <a class="confirm-text p-2" href="javascript:void(0);">
-                                                    <i data-feather="trash-2" class="feather-trash-2"></i>
-                                                </a>
+                                                <form action="{{ route('admin.brands.destroy', $brand->id) }}" method="post" class="delete-form">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <a class="confirm-text2 p-2" href="javascript:void(0);">
+                                                        <i data-feather="trash-2" class="feather-trash-2"></i>
+                                                    </a>
+                                                </form>
                                             </div>
 
                                         </td>
@@ -76,8 +80,8 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body custom-modal-body new-employee-field">
-                                                            <form action="{{ route('admin.brands.update', $brand->id) }}" method="POST"
-                                                                enctype="multipart/form-data">
+                                                            <form action="{{ route('admin.brands.update', $brand->id) }}"
+                                                                method="POST" enctype="multipart/form-data">
                                                                 @csrf
                                                                 @method('PUT')
                                                                 <div class="mb-3">
@@ -175,3 +179,29 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $('.confirm-text2').on('click', function(e) {
+            e.preventDefault();
+
+            // Get the associated delete form
+            var deleteForm = $(this).closest('tr').find('.delete-form');
+
+            // Show the SweetAlert confirmation dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                // icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteForm.submit();
+                }
+            });
+        });
+    </script>
+@endpush

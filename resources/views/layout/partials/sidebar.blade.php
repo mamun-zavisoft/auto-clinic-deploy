@@ -3,6 +3,13 @@
     <div class="sidebar-inner slimscroll">
         <div id="sidebar-menu" class="sidebar-menu">
             <ul>
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">Inventory</h6>
+                    <ul>
+                        <li class="{{ Request::is('brands') ? 'active' : '' }}"><a
+                                href="{{ route('admin.brands.index') }}"><i data-feather="tag"></i><span>Brands</span></a></li>
+                    </ul>
+                </li>
                 {{-- user management --}}
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">User Management</h6>
