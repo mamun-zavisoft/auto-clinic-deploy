@@ -3,6 +3,7 @@
     <div class="sidebar-inner slimscroll">
         <div id="sidebar-menu" class="sidebar-menu">
             <ul>
+                {{-- core --}}
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Inventory</h6>
                     <ul>
@@ -13,6 +14,15 @@
                                 href="{{ route('admin.brands.index') }}"><i
                                     data-feather="tag"></i><span>Brands</span></a></li>
 
+                    </ul>
+                </li>
+                {{-- peoples --}}
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">Peoples</h6>
+                    <ul>
+                        <li class="{{ Request::is('suppliers') ? 'active' : '' }}"><a
+                                href="{{ route('admin.suppliers.index') }}"><i data-feather="users"></i><span>Suppliers</span></a>
+                        </li>
                     </ul>
                 </li>
                 {{-- user management --}}

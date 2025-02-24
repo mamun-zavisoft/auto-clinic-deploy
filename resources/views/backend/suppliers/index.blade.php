@@ -2,7 +2,7 @@
 @section('content')
     <div class="page-wrapper">
         <div class="content">
-            <x-breadcrumb-modal title="Brand List" sub-title="Manage Your Brands" button="Add Brand" modal-id="add-brand" />
+            <x-breadcrumb-modal title="Supplier List" sub-title="Manage suppliers" button="Add Supplier" modal-id="add-supplier" />
 
             <!-- /product list -->
             <div class="card table-list-card">
@@ -24,37 +24,30 @@
                             <thead>
                                 <tr>
                                     <th class="no-sort">SL</th>
-                                    <th>Brand</th>
-                                    <th>Logo</th>
-                                    <th>Created On</th>
-                                    <th>Status</th>
+                                    <th>Name</th>
+                                    <th>Zone</th>
+                                    <th>Phone</th>
+                                    <th>Balance</th>
                                     <th class="no-sort">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="tbody">
-                                @foreach ($brands as $brand)
-                                @php
-                                    $image = $brand->image;
-                                @endphp
+                                @foreach ($suppliers as $supplier)
                                     <tr>
                                         <td>
-                                            {{ $loop->iteration + $brands->firstItem() - 1 }}
+                                            {{ $loop->iteration + $suppliers->firstItem() - 1 }}
                                         </td>
-                                        <td>{{ $brand->name }}</td>
-                                        <td><span class="d-flex"><img
-                                                    src="{{ $image ?: asset('build/img/no-image.svg') }}"
-                                                    style="width: 50px; height: 50px;" alt=""></span></td>
-                                        <td>{{ $brand->created_at->format('d M Y') }}</td>
-                                        <td><span
-                                                class="badge rounded-pill bg-outline-{{ $brand->status == 1 ? 'success' : 'warning' }}">{{ $brand->status == 1 ? 'Active' : 'Inactive' }}</span>
-                                        </td>
+                                        <td>{{ $supplier->name }}</td>
+                                        <td>{{ $supplier->zone?->name }}</td>
+                                        <td>{{ $supplier->phone ?? "N/A" }}</td>
+                                        <td>{{ number_format((int)$supplier->balance, 0) }}</td>
                                         <td class="action-table-data">
                                             <div class="edit-delete-action">
                                                 <a class="me-2 p-2" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#edit-brand-{{ $brand->id }}">
+                                                    data-bs-target="#edit-supplier-{{ $supplier->id }}">
                                                     <i data-feather="edit" class="feather-edit"></i>
                                                 </a>
-                                                <form action="{{ route('admin.brands.destroy', $brand->id) }}"
+                                                <form action="{{ route('admin.suppliers.destroy', $supplier->id) }}"
                                                     method="post" class="delete-form">
                                                     @csrf
                                                     @method('DELETE')
@@ -67,15 +60,15 @@
                                         </td>
                                     </tr>
 
-                                    <!-- Edit Brand -->
-                                    <div class="modal fade" id="edit-brand-{{ $brand->id }}">
+                                    <!-- Edit supplier -->
+                                    <div class="modal fade" id="edit-supplier-{{ $supplier->id }}">
                                         <div class="modal-dialog modal-dialog-centered custom-modal-two">
                                             <div class="modal-content">
                                                 <div class="page-wrapper-new p-0">
                                                     <div class="content">
                                                         <div class="modal-header border-0 custom-modal-header">
                                                             <div class="page-title">
-                                                                <h4>Edit Brand</h4>
+                                                                <h4>Edit Supplier</h4>
                                                             </div>
                                                             <button type="button" class="close" data-bs-dismiss="modal"
                                                                 aria-label="Close">
@@ -83,37 +76,33 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body custom-modal-body new-employee-field">
-                                                            <form class="editForm" data-id="{{ $brand->id }}"
-                                                                action="{{ route('admin.brands.update', $brand->id) }}"
+                                                            <form class="editForm" data-id="{{ $supplier->id }}"
+                                                                action="{{ route('admin.suppliers.update', $supplier->id) }}"
                                                                 method="POST" enctype="multipart/form-data">
                                                                 @csrf
                                                                 @method('PUT')
                                                                 <div class="mb-3">
-                                                                    <label class="form-label">Brand*</label>
+                                                                    <label class="form-label">Name*</label>
                                                                     <input type="text" class="form-control"
-                                                                        value="{{ $brand->name }}" name="name">
+                                                                        value="{{ $supplier->name }}" name="name">
                                                                 </div>
-                                                                <label class="form-label">Logo</label>
-                                                                <div class="profile-pic-upload mb-3 image-container">
-                                                                    <div class="profile-pic brand-pic">
-                                                                        <span>
-                                                                            <img src="{{ $image ?: asset('build/img/icons/upload.svg') }}"
-                                                                                class="image-preview" alt="">
-                                                                        </span>
-                                                                        <a href="javascript:void(0);"
-                                                                            class="remove-photo d-none">
-                                                                            <i data-feather="x" class="x-square-add"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                    <div class="image-upload mb-0">
-                                                                        <input class="image-input" type="file"
-                                                                            name="image">
-                                                                        <div class="image-uploads">
-                                                                            <h4>Change Image</h4>
-                                                                        </div>
-                                                                    </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Zone*</label>
+                                                                    <select class="select" name="zone_id">
+                                                                        <option value="">Select Zone</option>
+                                                                        @foreach ($zones as $zone)
+                                                                            <option value="{{ $zone->id }}"
+                                                                                {{ $supplier->zone_id == $zone->id ? 'selected' : '' }}>
+                                                                                {{ $zone->name }}</option>
+                                                                        @endforeach
+                                                                    </select>
                                                                 </div>
-
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Phone*</label>
+                                                                    <input type="text" class="form-control"
+                                                                        value="{{ $supplier->phone }}" name="phone">
+                                                                </div>
+                                                               
                                                                 <div class="modal-footer-btn">
                                                                     <button type="button" class="btn btn-cancel me-2"
                                                                         data-bs-dismiss="modal">Cancel</button>
@@ -127,7 +116,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Edit Brand -->
+                                    <!-- Edit supplier -->
                                 @endforeach
 
                             </tbody>
@@ -139,52 +128,56 @@
         </div>
     </div>
 
-    <!-- Add Brand -->
-    <div class="modal fade" id="add-brand">
+    <!-- Add supplier -->
+    <div class="modal fade" id="add-supplier">
         <div class="modal-dialog modal-dialog-centered custom-modal-two">
             <div class="modal-content">
                 <div class="page-wrapper-new p-0">
                     <div class="content">
                         <div class="modal-header border-0 custom-modal-header">
                             <div class="page-title">
-                                <h4>Create Brand</h4>
+                                <h4>Create Supplier</h4>
                             </div>
                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body custom-modal-body new-employee-field">
-                            <form action="{{ route('admin.brands.store') }}" method="POST"
-                                enctype="multipart/form-data" id="storeForm">
+                            <form action="{{ route('admin.suppliers.store') }}" method="POST" enctype="multipart/form-data"
+                                id="storeForm">
                                 @csrf
                                 <div class="mb-3">
-                                    <label class="form-label">Brand</label>
+                                    <label class="form-label">Name*</label>
                                     <input type="text" name="name" class="form-control">
                                 </div>
-                                <label class="form-label">Logo</label>
-                                <div class="profile-pic-upload mb-3 image-container">
-                                    <div class="profile-pic brand-pic">
-                                        <span>
-                                            <img src="{{ asset('build/img/icons/upload.svg') }}"
-                                                class="image-preview" alt="">
-                                        </span>
-                                        <a href="javascript:void(0);" class="remove-photo d-none">
-                                            <i data-feather="x" class="x-square-add"></i>
-                                        </a>
-                                    </div>
-                                    <div class="image-upload mb-0">
-                                        <input class="image-input" type="file" name="image">
-                                        <div class="image-uploads">
-                                            <h4>Change Image</h4>
-                                        </div>
-                                    </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Zone*</label>
+                                    <select class="select" name="zone_id">
+                                        <option value="">Select Zone</option>
+                                        @foreach ($zones as $zone)
+                                            <option value="{{ $zone->id }}">
+                                                {{ $zone->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Phone*</label>
+                                    <input type="text" class="form-control"
+                                        value="{{ old('phone') }}" name="phone">
                                 </div>
 
+                                <div class="mb-3">
+                                    <label class="form-label">Balance</label>
+                                    <input type="text" class="form-control"
+                                        value="{{ old('balance') }}" name="balance">
+                                </div>
+                                
 
                                 <div class="modal-footer-btn">
                                     <button type="button" class="btn btn-cancel me-2"
                                         data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-submit" id="submit_btn">Create Brand</button>
+                                    <button type="submit" class="btn btn-submit" id="submit_btn">Create Supplier</button>
                                 </div>
                             </form>
                         </div>
@@ -214,7 +207,7 @@
 
                 }).done(function(response) {
                     if (response.type == 'success') {
-                        $('#add-brand').modal('hide');
+                        $('#add-supplier').modal('hide');
                         toastr.success(response.message);
                         setTimeout(() => {
                             location.reload();

@@ -12,10 +12,10 @@ class ZoneController extends Controller
     
     public function index(Request $request) 
     {
-        $zones = (new FetchZone)->excute($request);
+        $zones = (new FetchZone)->execute($request);
 
         if ($request->ajax()) {
-            return view('component.zones.table', ['entity' => $zones])->render();
+            return view('components.zones.table', ['entity' => $zones])->render();
         }
 
         return view('backend.zones.index',compact('zones'));

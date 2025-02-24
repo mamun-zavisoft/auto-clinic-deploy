@@ -9,7 +9,7 @@
         content="admin, estimates, bootstrap, business, corporate, creative, invoice, html5, responsive, Projects">
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
-    <title>Fast Auto Clinics</title>
+    <title>Fast Auto Clinic</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon"
@@ -51,6 +51,10 @@
 <!-- /Main Wrapper -->
 {{-- @include('layout.partials.theme-settings') --}}
 @include('layout.partials.footer-scripts')
+<script>
+    // Default image path
+    const defaultUploadImagePath = '{{ asset('build/img/icons/upload.svg') }}';
+</script>
 
 @stack('scripts')
 </body>

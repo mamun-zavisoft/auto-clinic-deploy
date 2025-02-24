@@ -2,21 +2,21 @@
 
 namespace App\Actions;
 
-use App\Models\Category;
+use App\Models\Supplier;
 
-class FetchCategory
+class FetchSupplier
 {
     public function execute($request)
     {
         $search = $request->input('search', '');
         $perPage = $request->input('per_page', 10);
 
-        return Category::query()
-            ->with('media')
+        return Supplier::query()
+            ->with('zone')
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
-            ->select('id', 'name', 'created_at')
+            ->select('id', 'zone_id', 'name', 'phone', 'balance')
             ->orderBy('id', 'desc')->paginate($perPage)->withQueryString();
     }
 }

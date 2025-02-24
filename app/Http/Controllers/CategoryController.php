@@ -12,7 +12,7 @@ class CategoryController extends Controller
     {
        $categories = (new FetchCategory)->execute($request);
         if ($request->ajax()) {
-            return view('components.category.table', ['entity' => $categories])->render();
+            return view('components.categories.table', ['entity' => $categories])->render();
         }
 
         return view('backend.categories.index', compact('categories'));
@@ -22,11 +22,15 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:50|unique:categories,name',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         try {
             $category = Category::create([
                 'name' => $request->name,
             ]);
+
+            $category->image = $request->file('image');
+            $category->save();
     
             return response()->json(['message' => 'Category created successfully!', 'type' => 'success' ], 200);
         } catch (\Throwable $th) {
@@ -46,6 +50,9 @@ class CategoryController extends Controller
             $category->update([
                 'name' => $request->name,
             ]);
+            
+            $category->image = $request->file('image');
+            $category->save();
 
             return response()->json(['message' => 'Category updated successfully!', 'type' => 'success' ]);
         } catch (\Throwable $th) {
