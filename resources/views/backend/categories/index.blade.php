@@ -242,7 +242,6 @@
 
                 }).done(function(response) {
                     if (response.type == 'success') {
-                        $('.edit-category').modal('hide');
                         toastr.success(response.message);
                         setTimeout(() => {
                             location.reload();
