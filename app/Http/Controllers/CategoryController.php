@@ -12,7 +12,7 @@ class CategoryController extends Controller
     {
        $categories = (new FetchCategory)->execute($request);
         if ($request->ajax()) {
-            return view('components.category.table', ['entity' => $categories])->render();
+            return view('components.categories.table', ['entity' => $categories])->render();
         }
 
         return view('backend.categories.index', compact('categories'));

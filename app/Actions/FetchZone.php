@@ -7,7 +7,7 @@ use App\Models\Zone;
 class FetchZone
 {
 
-    public function excute($request)
+    public function execute($request)
     {
         $search = $request->input('search', '');
         $perPage = $request->input('per_page', 10);

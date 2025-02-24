@@ -41,7 +41,7 @@
                                         <td>{{ $zone->name }}</td>
                                         <td>{{ $zone->phone }}</td>
                                         <td>{{ $zone->location }}</td>
-                                        <td>{{ $zone->created_at->format('d M Y') }}</td>
+                                        <td>{{ $zone->created_at?->format('d M Y') }}</td>
                                         <td class="action-table-data">
                                             <div class="edit-delete-action">
                                                 <a class="me-2 p-2" href="#" data-bs-toggle="modal"
