@@ -32,13 +32,16 @@
                             </thead>
                             <tbody id="tbody">
                                 @foreach ($categories as $category)
+                                @php
+                                    $image = $category->image;
+                                @endphp
                                     <tr>
                                         <td>
                                             {{ $loop->iteration + $categories->firstItem() - 1 }}
                                         </td>
                                         <td>{{ $category->name }}</td>
                                         <td><span class="d-flex"><img
-                                                    src="{{ $category->image ?: asset('build/img/no-image.svg') }}"
+                                                    src="{{ $image ?: asset('build/img/no-image.svg') }}"
                                                     style="width: 50px; height: 50px;" 
                                                     alt=""></span></td>
                                         <td>{{ $category->created_at->format('d M Y') }}</td>
@@ -91,7 +94,7 @@
                                                                 <div class="profile-pic-upload mb-3 image-container">
                                                                     <div class="profile-pic brand-pic">
                                                                         <span>
-                                                                            <img src="{{ $category->image ?: asset('build/img/icons/upload.svg') }}"
+                                                                            <img src="{{ $image ?: asset('build/img/icons/upload.svg') }}"
                                                                                 class="image-preview" alt="">
                                                                         </span>
                                                                         <a href="javascript:void(0);"

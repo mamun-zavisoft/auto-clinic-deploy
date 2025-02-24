@@ -33,13 +33,16 @@
                             </thead>
                             <tbody id="tbody">
                                 @foreach ($brands as $brand)
+                                @php
+                                    $image = $brand->image;
+                                @endphp
                                     <tr>
                                         <td>
                                             {{ $loop->iteration + $brands->firstItem() - 1 }}
                                         </td>
                                         <td>{{ $brand->name }}</td>
                                         <td><span class="d-flex"><img
-                                                    src="{{ $brand->image ?: asset('build/img/no-image.svg') }}"
+                                                    src="{{ $image ?: asset('build/img/no-image.svg') }}"
                                                     style="width: 50px; height: 50px;" alt=""></span></td>
                                         <td>{{ $brand->created_at->format('d M Y') }}</td>
                                         <td><span
@@ -94,7 +97,7 @@
                                                                 <div class="profile-pic-upload mb-3 image-container">
                                                                     <div class="profile-pic brand-pic">
                                                                         <span>
-                                                                            <img src="{{ $brand->image ?: asset('build/img/icons/upload.svg') }}"
+                                                                            <img src="{{ $image ?: asset('build/img/icons/upload.svg') }}"
                                                                                 class="image-preview" alt="">
                                                                         </span>
                                                                         <a href="javascript:void(0);"

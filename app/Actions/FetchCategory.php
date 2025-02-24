@@ -12,6 +12,7 @@ class FetchCategory
         $perPage = $request->input('per_page', 10);
 
         return Category::query()
+            ->with('media')
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })

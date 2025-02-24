@@ -108,18 +108,18 @@ trait HasMedia
     public function getFirstUrl($collectionName = null)
     {
         try {
-            $query = $this->media();
             if ($collectionName) {
-                $query->where('collection_name', $collectionName);
+                $query = collect($this->media)->where('collection_name', $collectionName);
+            } else {
+                $query = collect($this->media);
             }
-            $media = $query->select('file_path')->first();
-            return $media ? Storage::disk($this->disk_name)->url($media->file_path) : null;
+            $media = $query->first();
+
+            return $media ? Storage::disk($this->disk_name)->url($media->file_path) : '';
         } catch (\Exception $exception) {
-            throw new \Exception("Failed to retrieve media URL: " . $exception->getMessage());
+            return $exception->getMessage();
         }
     }
-
-
 
     /**
      * Delete media from the model.
