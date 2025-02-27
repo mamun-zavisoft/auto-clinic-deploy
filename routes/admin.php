@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RackController;
 use App\Http\Controllers\ServiceChartController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StockPurchaseController;
 use App\Http\Controllers\SupplierController;
@@ -28,6 +29,7 @@ Route::middleware('auth')->name('admin.')->group(function () {
     Route::resource('/purchases', PurchaseController::class);
     Route::resource('/accounts', AccountController::class);
     Route::resource('/vehicles', VehiclesController::class);
+    Route::resource('/services', ServiceController::class);
     
     // single action routes
     Route::get('/product/search', [ProductController::class, 'search'])->name('products.search');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Rack;
 use App\Models\StockHistory;
@@ -114,6 +115,9 @@ class StockPurchaseController extends Controller
                         'sale_price' => $purchaseDetail->sale_price ?? 0,
                         'qty' => $location['quantity']
                     ]);
+                    $product = Product::find($location['product_id']);
+                    $product->total_available_qty += $location['quantity'];
+                    $product->save();
                     
                     $stockPurchase->save();
                     
