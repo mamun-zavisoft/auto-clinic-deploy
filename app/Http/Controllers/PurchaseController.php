@@ -40,6 +40,7 @@ class PurchaseController extends Controller
             return response()->json([
                 'message' => 'Purchase created successfully.',
                 'type' => 'success',
+                'redirectUrl' =>  route('admin.purchases.index'),
             ], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
@@ -53,7 +54,6 @@ class PurchaseController extends Controller
         ]);
         try {
             $purchase = Purchase::findOrFail($id);
-
             $purchase->update(['status' => $request->status]);
 
             return redirect()->route('admin.purchases.index')->with('success', 'Purchase status updated successfully.');

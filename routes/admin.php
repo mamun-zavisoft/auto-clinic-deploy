@@ -13,6 +13,7 @@ use App\Http\Controllers\StockPurchaseController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\VehiclesController;
 use App\Http\Controllers\ZoneController;
+use App\Models\Drawer;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->name('admin.')->group(function () {
@@ -32,7 +33,12 @@ Route::middleware('auth')->name('admin.')->group(function () {
     Route::get('/product/search', [ProductController::class, 'search'])->name('products.search');
     Route::put('/purchases/statusChange/{id}', [PurchaseController::class, 'statusChange'])->name('purchases.statusChange');
     Route::get('/stock-purchases/{id}', [StockPurchaseController::class, 'create'])->name('stock-purchases.create');
+    Route::post('/stock-purchases/{id}/store', [StockPurchaseController::class, 'store'])->name('stock-purchases.store');
 
+    // ajax call routes
+    Route::get('/drawers/fetch/{rackId}', [DrawerController::class, 'fetchDrawersByRack'])->name('racks.fetchDrawers');
+    
+    // system general settings
     Route::controller(SettingController::class)->group(function () {
         Route::delete('/media/{modelName}/{id}', 'destroyMedia')->name('media.destroy');
     });
