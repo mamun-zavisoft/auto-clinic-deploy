@@ -47,7 +47,7 @@ class ServiceController extends Controller
                 'service_type' => 'required|in:self,external',
                 'vehicle_id' => 'required|exists:vehicles,id',
                 'service_chart_ids' => 'required|array|exists:service_charts,id',
-                'any_parts_purchase' => 'required|boolean',
+                'any_parts_purchase' => 'nullable|boolean',
                 'parts' => 'required_if:any_parts_purchase,1|array',
                 'payment_type_id' => 'nullable|integer',
                 'discount' => 'nullable|numeric',
@@ -65,7 +65,7 @@ class ServiceController extends Controller
                 'note' => $request->note,
                 'grand_total' => $request->grand_total,
                 'total_amount' => $request->total_amount,
-                'any_parts_purchase' => $request->any_parts_purchase
+                'any_parts_purchase' => $request->any_parts_purchase ?? false,
             ]);
 
             // Associate service charts

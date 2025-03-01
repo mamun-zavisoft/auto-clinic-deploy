@@ -13,7 +13,7 @@ class Product extends Model implements Mediable
 
     protected $guarded = [];
 
-    protected $appends = ['thumbnail', 'images'];
+    protected $appends = ['thumbnail', 'images', 'total_available_quantity'];
 
     public function brand()
     {
@@ -96,6 +96,10 @@ class Product extends Model implements Mediable
             ->count();
 
         return $availableCount;
+    }
+
+    public function getTotalAvailableQuantityAttribute(){
+        return $this->getTotalAvailableQuantity();
     }
 
     /**

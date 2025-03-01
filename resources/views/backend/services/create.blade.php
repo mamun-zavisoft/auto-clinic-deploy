@@ -57,7 +57,7 @@
                             <div class="col-md-12">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="partsCheckbox"
-                                        name="any_parts_purchase" value="1">
+                                        name="any_parts_purchase" >
                                     <label class="form-check-label" for="partsCheckbox">
                                         Include Parts in Service
                                     </label>
@@ -522,7 +522,9 @@
                             $.each(response.errors, function(key, value) {
                                 toastr.error(value);
                             });
-                        } else {
+                        } else if (response && response.message) {
+                            toastr.error(response.message);
+                        }else {
                             toastr.error('An error occurred. Please try again.');
                         }
                     }
