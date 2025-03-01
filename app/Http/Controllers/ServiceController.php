@@ -35,6 +35,7 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         // Validate the request
         $validator = Validator::make($request->all(), [
             'service_type' => 'required|in:self,external',
