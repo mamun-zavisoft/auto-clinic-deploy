@@ -29,4 +29,9 @@ class Purchase extends Model
             'product_id'             // Local key on the intermediate model
         );
     }
+
+    public function payment()
+    {
+        return $this->morphOne(Payment::class, 'transaction', 'transaction_type', 'transaction_id');
+    }
 }
