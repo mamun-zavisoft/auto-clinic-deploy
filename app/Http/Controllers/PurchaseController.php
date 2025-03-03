@@ -189,4 +189,10 @@ class PurchaseController extends Controller
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
+
+    public function view_payments($id){
+        $purchase = Purchase::find($id);
+        $accounts = Account::select('id', 'name', 'balance')->get();
+        return view('backend.purchases.view_payments', compact('purchase', 'accounts'));
+    }
 }
