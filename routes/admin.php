@@ -44,7 +44,7 @@ Route::middleware('auth')->name('admin.')->group(function () {
 
     // ajax call routes
     Route::get('/drawers/fetch/{rackId}', [DrawerController::class, 'fetchDrawersByRack'])->name('racks.fetchDrawers');
-    Route::get('/purchase/view/payments/{id}', [PurchaseController::class, 'view_payments'])->name('order.view.payments');
+    Route::get('/purchase/view/payments/{id}', [PurchaseController::class, 'view_payments'])->name('purchase.view.payments');
 
     
     // system general settings
