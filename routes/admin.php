@@ -6,9 +6,11 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DrawerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\PurchasesDetailController;
 use App\Http\Controllers\RackController;
 use App\Http\Controllers\ServiceChartController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ServiceDetailController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockPurchaseController;
@@ -33,7 +35,7 @@ Route::middleware('auth')->name('admin.')->group(function () {
     Route::resource('/accounts', AccountController::class);
     Route::resource('/vehicles', VehiclesController::class);
     Route::resource('/services', ServiceController::class);
-    
+     
     // single action routes
     Route::get('/product/search', [ProductController::class, 'search'])->name('products.search');
     Route::put('/purchases/statusChange/{id}', [PurchaseController::class, 'statusChange'])->name('purchases.statusChange');
