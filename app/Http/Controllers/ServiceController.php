@@ -20,7 +20,7 @@ class ServiceController extends Controller
 
     public function index()
     {
-        $services = Service::with('vehicle')->get();
+        $services = Service::with('vehicle')->orderBy('id', 'desc')->get();
         $serviceCharts = ServiceChart::select('id','name','price','code')->get();
         $serviceDetails = ServiceDetail::select('service_id', 'service_chart_id', 'price')->get();
         $products = Product::with('category', 'brand')->get();
@@ -112,7 +112,7 @@ class ServiceController extends Controller
                 'paid_amount' => $request->amount ?? $amount,
                 'paid_status' => $request->service_type == 'self' ? 'in_house': $this->calculatePaidStatus($request->grand_total, $request->amount),
             ]);
-            if($payment){
+            if($payment && $request->amount > 0){
                 $payment->paymentDetails()->create([
                     'account_id' => $request->account_id,
                     'amount' => $request->amount ?? $amount,
@@ -322,7 +322,7 @@ class ServiceController extends Controller
             return response()->json([
                 'message' => 'Payment created successfully.',
                 'type' => 'success',
-                'redirectUrl' =>  route('admin.purchases.index'),
+                'redirectUrl' =>  route('admin.services.index'),
             ]);
         } catch (Exception $e) {
             DB::rollBack();
