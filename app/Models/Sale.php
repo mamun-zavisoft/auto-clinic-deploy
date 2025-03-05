@@ -22,4 +22,9 @@ class Sale extends Model
     {
         return $this->hasOne(Payment::class);
     }
+
+    public function scopeOnlySales($query)
+    {
+        return $query->where('type', 'only_sale');
+    }
 }

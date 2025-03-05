@@ -19,10 +19,6 @@
                                 href="{{ route('admin.brands.index') }}">
                                 <i data-feather="tag"></i><span>Brands</span></a>
                         </li>
-                        <li class="{{ Request::is('zones') ? 'active' : '' }}"><a
-                                href="{{ route('admin.zones.index') }}">
-                                <i data-feather="map-pin"></i><span>Zones</span></a>
-                        </li>
                         <li class="{{ Request::is('racks') ? 'active' : '' }}"><a
                                 href="{{ route('admin.racks.index') }}">
                                 <i data-feather="layers"></i><span>Racks</span></a>
@@ -63,7 +59,12 @@
                     <ul>
                         <li class="{{ Request::is('services*') ? 'active' : '' }}"><a
                                 href="{{ route('admin.services.index') }}"><i
-                                    data-feather="shopping-cart"></i><span>Services</span>
+                                    data-feather="truck"></i><span>Services</span>
+                            </a>
+                        </li>
+                        <li class="{{ Request::is('sales*') ? 'active' : '' }}"><a
+                                href="{{ route('admin.sales.index') }}"><i
+                                    data-feather="shopping-cart"></i><span>Sale</span>
                             </a>
                         </li>
                     </ul>

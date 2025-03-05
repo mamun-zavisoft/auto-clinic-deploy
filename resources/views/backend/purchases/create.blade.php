@@ -97,7 +97,7 @@
                                     </div>
                                     <div class="col-lg-3 col-md-6 col-sm-12">
                                         <div class="input-blocks">
-                                            <label>Status</label>
+                                            <label>Status*</label>
                                             <select class="select" name="status">
                                                 <option value="">Choose</option>
                                                 <option value="received">Received</option>
