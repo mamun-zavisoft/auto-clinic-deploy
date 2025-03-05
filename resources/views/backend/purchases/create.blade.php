@@ -97,7 +97,7 @@
                                     </div>
                                     <div class="col-lg-3 col-md-6 col-sm-12">
                                         <div class="input-blocks">
-                                            <label>Status</label>
+                                            <label>Status*</label>
                                             <select class="select" name="status">
                                                 <option value="">Choose</option>
                                                 <option value="received">Received</option>
@@ -255,7 +255,7 @@
                     <td>
                         <div class="product-quantity">
                             <span class="quantity-btn" >+<i data-feather="plus-circle" class="plus-circle"></i></span>
-                            <input type="text" id="qty${id}" name="qty[]" data-price="${purchase_price}" class="quntity-input" value="1" data-id="${id}" >
+                            <input type="number" id="qty${id}" name="qty[]" data-price="${purchase_price}" class="quntity-input" value="1" data-id="${id}" >
                             <span class="quantity-btn" ><i data-feather="minus-circle" class="feather-search"></i></span>
                         </div>
                     </td>

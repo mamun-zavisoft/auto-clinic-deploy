@@ -169,6 +169,9 @@ class ServiceController extends Controller
                             ->where('id', $history->id)
                             ->update(['sale_id' => $sale->id]); 
                     }
+                    DB::table('products')
+                        ->where('id', $part['product_id'])
+                        ->decrement('total_available_qty', $part['quantity']);
 
                     $sale->SaleDetails()->create([
                         'product_id' => $part['product_id'],

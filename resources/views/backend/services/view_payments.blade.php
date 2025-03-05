@@ -6,7 +6,7 @@
                     {{ $service->vehicle?->license_plate }}
                 </h5>
                 <p class="text-muted">Date:
-                    {{ $service->created_at?->format('d M Y h:i:A') }}
+                    {{ $service->created_at?->format('d M Y h:i A') }}
                 </p>
             </div>
             <div class="text-start">

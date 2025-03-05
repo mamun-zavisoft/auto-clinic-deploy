@@ -23,12 +23,6 @@
                         <table class="table  datanew list">
                             <thead>
                                 <tr>
-                                    {{-- <th class="no-sort">
-                                        <label class="checkboxs">
-                                            <input type="checkbox" id="select-all">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </th> --}}
                                     <th>Invoice No</th>
                                     <th>Supplier Name</th>
                                     <th>Reference</th>
@@ -44,19 +38,13 @@
                             <tbody>
                                 @foreach ($purchases as $purchase)
                                     <tr>
-                                        {{-- <td>
-                                            <label class="checkboxs">
-                                                <input type="checkbox">
-                                                <span class="checkmarks"></span>
-                                            </label>
-                                        </td> --}}
                                         <td class="fw-bold">#{{ $purchase->transaction_id }}</td>
                                         <td>{{ $purchase->supplier?->name }}</td>
                                         <td>{{ $purchase->reference_no }}</td>
                                         <td>{{ $purchase->date }}</td>
                                         <td>
                                             @if ($purchase->status == 'pending')
-                                                <span class="badges status-badge bg-warning" data-bs-target="#status-change"
+                                                <span class="badges status-badge bg-warning" data-bs-target="#status-change-{{ $purchase->id }}"
                                                     data-bs-toggle="modal">Pending</span>
                                             @elseif ($purchase->status == 'received')
                                                 <a href="{{ route('admin.stock-purchases.create', $purchase) }}">
@@ -102,7 +90,7 @@
                                     </tr>
 
                                     {{-- status change modal  --}}
-                                    <div class="modal fade" id="status-change">
+                                    <div class="modal fade" id="status-change-{{ $purchase->id }}">
                                         <div class="modal-dialog modal-dialog-centered custom-modal-two">
                                             <div class="modal-content">
                                                 <div class="page-wrapper-new p-0">
@@ -118,7 +106,7 @@
                                                         </div>
                                                         <div class="modal-body custom-modal-body new-employee-field">
                                                             <form
-                                                                action="{{ route('admin.purchases.statusChange', $purchase) }}"
+                                                                action="{{ route('admin.purchases.statusChange', $purchase->id) }}"
                                                                 method="POST" enctype="multipart/form-data" id="storeForm">
                                                                 @csrf
                                                                 @method('PUT')
@@ -142,31 +130,7 @@
                                         </div>
                                     </div>
 
-                                    {{-- paid status modal --}}
-                                    <div class="modal fade" id="payment_modal">
-                                        <div class="modal-dialog modal-dialog-centered custom-modal-two">
-                                            <div class="modal-content" style="width: auto; padding-bottom: 50px;">
-                                                <div class="page-wrapper-new p-0">
-                                                    <div class="content">
-                                                        <div class="modal-header border-0 custom-modal-header">
-                                                            <div class="page-title">
-                                                                <h4>Purchase Payments</h4>
-                                                            </div>
-                                                            <button type="button" class="close" data-bs-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body custom-modal-body new-employee-field"
-                                                            id="view_payments">
-                                                            {{-- dynamically show payments --}}
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {{-- Product detail modal --}}
                                     <div class="modal fade" id="purchase-{{ $purchase->id }}">
                                         <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 90%; width: 90%;">
                                             <div class="modal-content" style="max-height: 90vh; display: flex; flex-direction: column;">
