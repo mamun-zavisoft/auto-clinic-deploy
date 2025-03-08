@@ -63,6 +63,13 @@ class ServiceController extends Controller
                 'account_id' => 'nullable|exists:accounts,id|required_if:payment_type,partial_paid,full_paid',
                 'amount' => 'nullable|numeric|min:1|required_if:payment_type,partial_paid,full_paid',
             ]);
+
+            $vehicle = Vehicle::find($request->vehicle_id);
+            $owner_type = $request->service_type == 'self' ? '1' : '2';
+
+            if ($vehicle && $vehicle->owner_type != $owner_type) {
+                return response()->json(['message' => 'Invalid vehicle selection!', 'type' => 'error'], 422);
+            }
             
             DB::beginTransaction();
 

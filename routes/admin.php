@@ -48,6 +48,7 @@ Route::middleware('auth')->name('admin.')->group(function () {
     Route::get('/drawers/fetch/{rackId}', [DrawerController::class, 'fetchDrawersByRack'])->name('racks.fetchDrawers');
     Route::get('/purchase/view/payments/{id}', [PurchaseController::class, 'view_payments'])->name('purchase.view.payments');
     Route::get('/service/view/payments/{id}', [ServiceController::class, 'view_payments'])->name('service.view.payments');
+    Route::get('/search/vehicle', [VehiclesController::class, 'searchVehicle'])->name('search.vehicle');
 
     
     // system general settings

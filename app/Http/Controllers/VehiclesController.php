@@ -82,5 +82,23 @@ class VehiclesController extends Controller
         return redirect()->back()->with('success', 'Vehicle deleted successfully!');
     }
 
+    public function searchVehicle(Request $request)
+    {
+        $request->validate([
+            'search' => 'required|string|max:40',
+            'service_type' => 'required|in:self,external'
+        ]);
+
+        $vehicles = Vehicle::where('owner_type', $request->service_type =='self' ? '1' : '2')
+                            ->where('license_plate', 'LIKE', "%{$request->search}%")
+                            ->get();
+
+        if ($vehicles->count() > 0) {
+            return response()->json(['message' => 'Vehicles found!', 'type' => 'success', 'data' => $vehicles],200);
+        } else {
+            return response()->json(['message' => 'Vehicle not found!', 'type' => 'error'],200);
+        }
+    }
+
 
 }
