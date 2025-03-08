@@ -32,13 +32,13 @@ class RackController extends Controller
             DB::beginTransaction();
 
             $request->validate([
-                'name' => 'required|string|max:50'
+                'name' => 'required|string|max:50|unique:racks,name'
             ]);
             // zone id comes from the auth
-            // $authId =  Auth::id();
+            $authId =  Auth::id();
             $rack = Rack::create([
                 'name' => $request->name,
-                'zone_id' => 1
+                'zone_id' => $authId,
             ]);
 
             DB::commit();
@@ -56,12 +56,12 @@ class RackController extends Controller
         try{
 
             $request->validate([
-                'name' => 'required|string|max:50' . $rack->id,
+                'name' => 'required|string|max:50|unique:racks,name,' . $rack->id,
             ]);
             
             $rack->update([
                 'name' => $request->name,
-                'zone_id' => 1
+                'zone_id' => Auth::id(),
             ]);
 
 
