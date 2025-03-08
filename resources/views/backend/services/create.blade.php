@@ -270,6 +270,7 @@
                     <input type="text" class="form-control part-price" name="parts[__index__][price]" readonly>
                     <input type="hidden" name="parts[__index__][unit_sale_price]" class="unit-sale-price">
                 </div>
+                <small class="text-muted part-unit-price">Unit Price: 0</small>
             </div>
             <div class="col-md-1">
                 <label>&nbsp;</label>
@@ -338,6 +339,7 @@
                     true);
                 row.find('.part-quantity').val(1).prop('disabled', true);
                 row.find('.stock-info').text('Available: 0');
+                row.find('.part-unit-price').text('Unit Price: 0');
                 row.find('.part-price').val('0.00');
                 row.find('.stock-purchase-id').val('');
 
@@ -361,6 +363,7 @@
                     true);
                 row.find('.part-quantity').val(1).prop('disabled', true);
                 row.find('.stock-info').text('Available: 0');
+                row.find('.part-unit-price').text('Unit Price: 0');
                 row.find('.part-price').val('0.00');
                 row.find('.stock-purchase-id').val('');
 
@@ -383,6 +386,7 @@
                 // Reset quantity and price fields
                 row.find('.part-quantity').val(1).prop('disabled', true);
                 row.find('.stock-info').text('Available: 0');
+                row.find('.part-unit-price').text('Unit Price: 0');
                 row.find('.part-price').val('0.00');
                 row.find('.stock-purchase-id').val('');
 
@@ -501,6 +505,7 @@
                                 .val(1);
 
                             row.find('.stock-info').text(`Available: ${availableQty}`);
+                            row.find('.part-unit-price').text(`Unit Price: ${salePrice}`);
                             row.find('.part-price')
                                 .val(parseFloat(salePrice).toFixed(2))
                                 .data('unit-price', parseFloat(salePrice));
@@ -514,6 +519,7 @@
                         } else {
                             row.find('.part-quantity').prop('disabled', true);
                             row.find('.stock-info').text('No stock available');
+                            row.find('.part-unit-price').text('Unit Price: 0');
                             row.find('.part-price').val('0.00');
                         }
                     },
