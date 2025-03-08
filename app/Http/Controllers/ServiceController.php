@@ -20,12 +20,11 @@ class ServiceController extends Controller
 
     public function index()
     {
-        $services = Service::with('vehicle')->orderBy('id', 'desc')->get();
+        $services = Service::with('vehicle', 'sale')->orderBy('id', 'desc')->get();
         $serviceCharts = ServiceChart::select('id','name','price','code')->get();
         $serviceDetails = ServiceDetail::select('service_id', 'service_chart_id', 'price')->get();
-        $products = Product::with('category', 'brand')->get();
 
-        return view('backend.services.index', compact('services','serviceCharts','serviceDetails', 'products'));
+        return view('backend.services.index', compact('services','serviceCharts','serviceDetails'));
     }
     /**
      * Display the service creation form

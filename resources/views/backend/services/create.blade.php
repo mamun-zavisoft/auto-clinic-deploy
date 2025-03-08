@@ -90,25 +90,6 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-lg-6 ms-auto">
-                                <div class="total-order w-100 max-widthauto m-auto mb-4">
-                                    <ul>
-                                        <li>
-                                            <h4>Paid</h4>
-                                            <h5 id="paid_amount">0</h5>
-                                             <input type="hidden" name="paid_amount"> {{-- main paid amount data sent by amount field --}}
-                                        </li>
-                                        <li>
-                                            <h4>Due</h4>
-                                            <h5 id="due_amount">0</h5>
-                                            <input type="hidden" name="due_amount">
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -210,12 +191,25 @@
                                 </div>
                                 <hr>
                                 <div class="row">
-                                    <div class="col-12 text-end">
-                                        <h4>Grand Total: <span id="grandTotal">0.00</span></h4>
+                                    <div class="col-12 text-end p-4 bg-light rounded shadow-sm">
+                                        <h4 class="fw-bold text-primary">Grand Total: 
+                                            <span id="grandTotal" class="text-dark">0.00</span>
+                                        </h4>
                                         <input type="hidden" name="grand_total" id="grandTotalInput" value="0">
                                         <input type="hidden" name="total_amount" id="totalAmountInput" value="0">
+                                
+                                        <h4 class="fw-bold text-success my-2">Paid: 
+                                            <span id="paid_amount" class="text-dark">0</span>
+                                        </h4>
+                                        <input type="hidden" name="paid_amount">
+                                
+                                        <h4 class="fw-bold text-danger">Due: 
+                                            <span id="due_amount" class="text-dark">0</span>
+                                        </h4>
+                                        <input type="hidden" name="due_amount">
                                     </div>
                                 </div>
+                                
                             </div>
                         </div>
 
