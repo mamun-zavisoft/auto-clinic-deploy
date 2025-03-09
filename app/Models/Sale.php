@@ -22,4 +22,9 @@ class Sale extends Model
     {
         return $this->hasOne(Payment::class);
     }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }
