@@ -325,15 +325,31 @@
             let quantity = parseInt($(this).val());
             let purchasePrice = parseFloat($(this).data('price'));
 
-            if (isNaN(quantity) || quantity < 1) {
+            if ( quantity < 1) {
                 quantity = 1;
                 $(this).val(quantity);
             }
 
             let totalCost = quantity * purchasePrice;
-            $(this).closest('tr').find('td').eq(4).text(totalCost.toFixed(2));
+            
+            if (!isNaN(quantity) || parseInt(quantity) > 0) {
+                
+                $(this).closest('tr').find('td').eq(4).text(totalCost.toFixed(2));
+                updateCartAction();
+            }
+        });
 
-            updateCartAction();
+        $(document).on('blur', '.quntity-input', function(e) {
+            quantity = $(this).val();
+            let purchasePrice = parseFloat($(this).data('price'));
+
+            if (quantity === '' || parseInt(quantity) < 1) {
+                $(this).val(1);
+                quantity = $(this).val();
+                totalCost = quantity * purchasePrice;
+                $(this).closest('tr').find('td').eq(4).text(totalCost.toFixed(2));
+                updateCartAction();
+            }
         });
 
         $(document).on('click', '.cart-item-action', function() {
@@ -351,6 +367,7 @@
             $('#cart-list-items tr').each(function() {
                 let quantity = parseInt($(this).find('.quntity-input').val());
                 let purchasePrice = parseFloat($(this).find('.quntity-input').data('price'));
+                
                 subtotal += quantity * purchasePrice;
             });
 
@@ -414,7 +431,7 @@
                 // For empty selection
                 $('.amount-field').hide();
                 $('#amount').attr('required', false);
-                $('#amount').val(0);
+                $('#amount').val();
             }
             updateCartAction(); // Update totals when payment type changes
         });

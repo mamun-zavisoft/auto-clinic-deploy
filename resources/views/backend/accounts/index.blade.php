@@ -98,7 +98,7 @@
                                                                 <div class="mb-3">
                                                                     <label class="form-label">Balance*</label>
                                                                     <input type="text" class="form-control"
-                                                                        value="{{ $account->balance }}" name="balance">
+                                                                        value="{{ $account->balance }}" name="balance" readonly>
                                                                 </div>
                                                                 <div class="modal-footer-btn">
                                                                     <button type="button" class="btn btn-cancel me-2"
@@ -135,7 +135,7 @@
                             <div class="page-title">
                                 <h4>Create Account</h4>
                             </div>
-                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#storeForm')[0].reset()">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -178,8 +178,23 @@
     <script>
         // ajax call for store
         $(document).ready(function() {
-            $('#storeForm').submit(function(e) {
-                e.preventDefault();
+            $('#storeForm').submit(async function(e) {
+            e.preventDefault();
+               $confirm = await Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to update the balance manually later!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, proceed!',
+                    cancelButtonText: 'Cancel'
+                });
+
+                if(! $confirm.isConfirmed){
+                    return false;
+                }
+
                 let SubmitBtn = $('#submit_btn');
                 SubmitBtn.prop('disabled', true);
                 let formData = new FormData(this);

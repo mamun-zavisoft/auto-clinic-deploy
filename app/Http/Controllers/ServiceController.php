@@ -20,12 +20,11 @@ class ServiceController extends Controller
 
     public function index()
     {
-        $services = Service::with('vehicle')->orderBy('id', 'desc')->get();
+        $services = Service::with('vehicle', 'sale')->orderBy('id', 'desc')->get();
         $serviceCharts = ServiceChart::select('id','name','price','code')->get();
         $serviceDetails = ServiceDetail::select('service_id', 'service_chart_id', 'price')->get();
-        $products = Product::with('category', 'brand')->get();
 
-        return view('backend.services.index', compact('services','serviceCharts','serviceDetails', 'products'));
+        return view('backend.services.index', compact('services','serviceCharts','serviceDetails'));
     }
     /**
      * Display the service creation form
@@ -64,6 +63,13 @@ class ServiceController extends Controller
                 'account_id' => 'nullable|exists:accounts,id|required_if:payment_type,partial_paid,full_paid',
                 'amount' => 'nullable|numeric|min:1|required_if:payment_type,partial_paid,full_paid',
             ]);
+
+            $vehicle = Vehicle::find($request->vehicle_id);
+            $owner_type = $request->service_type == 'self' ? '1' : '2';
+
+            if ($vehicle && $vehicle->owner_type != $owner_type) {
+                return response()->json(['message' => 'Invalid vehicle selection!', 'type' => 'error'], 422);
+            }
             
             DB::beginTransaction();
 

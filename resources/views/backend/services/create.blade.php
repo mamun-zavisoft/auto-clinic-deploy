@@ -18,7 +18,7 @@
                                     <label>Service Type <span class="text-danger">*</span></label>
                                     <select name="service_type" class="form-control" required>
                                         <option value="">Select Type</option>
-                                        <option value="self">Self</option>
+                                        <option value="self" selected>Self</option>
                                         <option value="external">External</option>
                                     </select>
                                 </div>
@@ -27,12 +27,12 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Vehicle <span class="text-danger">*</span></label>
-                                    <select name="vehicle_id" class="form-control select2" required>
+                                    <select name="vehicle_id" class="form-control select2 vehicle-search" required>
                                         <option value="">Select Vehicle</option>
-                                        @foreach ($vehicles as $vehicle)
+                                        {{-- @foreach ($vehicles as $vehicle)
                                             <option value="{{ $vehicle->id }}">{{ $vehicle->license_plate }} -
                                                 {{ $vehicle->owner_type == '1' ? 'Self' : 'External' }}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
                             </div>
@@ -90,25 +90,6 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-lg-6 ms-auto">
-                                <div class="total-order w-100 max-widthauto m-auto mb-4">
-                                    <ul>
-                                        <li>
-                                            <h4>Paid</h4>
-                                            <h5 id="paid_amount">0</h5>
-                                             <input type="hidden" name="paid_amount"> {{-- main paid amount data sent by amount field --}}
-                                        </li>
-                                        <li>
-                                            <h4>Due</h4>
-                                            <h5 id="due_amount">0</h5>
-                                            <input type="hidden" name="due_amount">
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -150,8 +131,7 @@
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label for="payment_account" class="form-label">Accounts</label>
-                                                <select class="form-control select2" id="payment_account"
-                                                    name="account_id">
+                                                <select class="form-control select2" id="payment_account" name="account_id">
                                                     <option value="">Select Account</option>
                                                     @foreach ($accounts as $account)
                                                         <option value="{{ $account->id }}">
@@ -210,12 +190,25 @@
                                 </div>
                                 <hr>
                                 <div class="row">
-                                    <div class="col-12 text-end">
-                                        <h4>Grand Total: <span id="grandTotal">0.00</span></h4>
+                                    <div class="col-12 text-end p-4 bg-light rounded shadow-sm">
+                                        <h4 class="fw-bold text-primary">Grand Total:
+                                            <span id="grandTotal" class="text-dark">0.00</span>
+                                        </h4>
                                         <input type="hidden" name="grand_total" id="grandTotalInput" value="0">
                                         <input type="hidden" name="total_amount" id="totalAmountInput" value="0">
+
+                                        <h4 class="fw-bold text-success my-2">Paid:
+                                            <span id="paid_amount" class="text-dark">0</span>
+                                        </h4>
+                                        <input type="hidden" name="paid_amount">
+
+                                        <h4 class="fw-bold text-danger">Due:
+                                            <span id="due_amount" class="text-dark">0</span>
+                                        </h4>
+                                        <input type="hidden" name="due_amount">
                                     </div>
                                 </div>
+
                             </div>
                         </div>
 
@@ -270,6 +263,7 @@
                     <input type="text" class="form-control part-price" name="parts[__index__][price]" readonly>
                     <input type="hidden" name="parts[__index__][unit_sale_price]" class="unit-sale-price">
                 </div>
+                <small class="text-muted part-unit-price">Unit Price: 0</small>
             </div>
             <div class="col-md-1">
                 <label>&nbsp;</label>
@@ -338,6 +332,7 @@
                     true);
                 row.find('.part-quantity').val(1).prop('disabled', true);
                 row.find('.stock-info').text('Available: 0');
+                row.find('.part-unit-price').text('Unit Price: 0');
                 row.find('.part-price').val('0.00');
                 row.find('.stock-purchase-id').val('');
 
@@ -361,6 +356,7 @@
                     true);
                 row.find('.part-quantity').val(1).prop('disabled', true);
                 row.find('.stock-info').text('Available: 0');
+                row.find('.part-unit-price').text('Unit Price: 0');
                 row.find('.part-price').val('0.00');
                 row.find('.stock-purchase-id').val('');
 
@@ -383,6 +379,7 @@
                 // Reset quantity and price fields
                 row.find('.part-quantity').val(1).prop('disabled', true);
                 row.find('.stock-info').text('Available: 0');
+                row.find('.part-unit-price').text('Unit Price: 0');
                 row.find('.part-price').val('0.00');
                 row.find('.stock-purchase-id').val('');
 
@@ -501,6 +498,7 @@
                                 .val(1);
 
                             row.find('.stock-info').text(`Available: ${availableQty}`);
+                            row.find('.part-unit-price').text(`Unit Price: ${salePrice}`);
                             row.find('.part-price')
                                 .val(parseFloat(salePrice).toFixed(2))
                                 .data('unit-price', parseFloat(salePrice));
@@ -514,6 +512,7 @@
                         } else {
                             row.find('.part-quantity').prop('disabled', true);
                             row.find('.stock-info').text('No stock available');
+                            row.find('.part-unit-price').text('Unit Price: 0');
                             row.find('.part-price').val('0.00');
                         }
                     },
@@ -677,17 +676,16 @@
                 updateTotals();
             });
 
-            // Handle service type selection (show/hide payment section)
             $('select[name="service_type"]').change(function() {
+                
+                // $('#vehicle_id').val(null).trigger('change');
+                $('#vehicle_id').select2('val', '');
                 if ($(this).val() === 'external') {
                     $('#paymentSection').removeClass('d-none');
-                    // Initialize select2 on payment dropdowns
                     $('#payment_type, #payment_account').select2();
-                    // Update paid/due calculation
                     updatePaidDueAmounts();
                 } else {
                     $('#paymentSection').addClass('d-none');
-                    // Reset payment fields when hiding
                     $('#payment_type').val('full_due');
                     $('#payment_account').val('');
                     $('#payment_amount').val('');
@@ -858,6 +856,39 @@
             });
             // Initialize paid/due amounts on page load
             updatePaidDueAmounts();
+
+            $('.vehicle-search').select2({
+                placeholder: "Select Vehicle",
+                allowClear: true,
+                ajax: {
+                    url: "{{ route('admin.search.vehicle') }}", 
+                    dataType: 'json',
+                    delay: 400,
+                    data: function(params) {
+                        return {
+                            search: params.term,
+                            service_type : $('select[name="service_type"]').val()
+                        };
+                    },
+                    processResults: function(response) {
+                        if (response.type === "success") {
+                            return {
+                                results: $.map(response.data, function(vehicle) { 
+                                    return {
+                                        id: vehicle.id,
+                                        text: vehicle.license_plate + ' - ' + (vehicle.owner_type == '1' ? 'Self' : 'External')
+                                    };
+                                })
+                            };
+                        } else {
+                            return {
+                                results: [{ id: '', text: 'No vehicles found', disabled: true }]
+                            };
+                        }
+                    },
+                    cache: true
+                }
+            });
         });
     </script>
 @endpush

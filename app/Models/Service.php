@@ -22,4 +22,9 @@ class Service extends Model
     {
         return $this->hasOne(Payment::class);
     }
+
+    public function sale()
+    {
+        return $this->belongsTo(Sale::class);
+    }
 }

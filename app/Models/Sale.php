@@ -27,4 +27,24 @@ class Sale extends Model
     {
         return $query->where('type', 'only_sale');
     }
+
+    public function scopeSelf($query)
+    {
+        return $query->where('type', 'self');
+    }
+
+    public function scopeExternal($query)
+    {
+        return $query->where('type', 'external');
+    }
+
+   public function service()
+   {
+       return $this->hasOne(Service::class);
+   }
+
+   public function products()
+   {
+       return $this->hasManyThrough(Product::class, SaleDetail::class, 'sale_id', 'id', 'id', 'product_id');
+   }
 }
