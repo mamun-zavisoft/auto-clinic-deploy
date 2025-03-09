@@ -40,6 +40,10 @@
                                         <td>{{ $rack->created_at?->format('d M Y') }}</td>
                                         <td class="action-table-data">
                                             <div class="edit-delete-action">
+                                                <a class="me-2 edit-icon  p-2" href="#" data-bs-toggle="modal"
+                                                data-bs-target="#drawers-{{ $rack->id }}">
+                                                    <i data-feather="eye" class="feather-eye"></i>
+                                                </a>
                                                 <a class="me-2 p-2" href="#" data-bs-toggle="modal"
                                                     data-bs-target="#edit-rack-{{ $rack->id }}">
                                                     <i data-feather="edit" class="feather-edit"></i>
@@ -63,7 +67,7 @@
                                             <div class="modal-content">
                                                 <div class="page-wrapper-new p-0">
                                                     <div class="content">
-                                                        <div class="modal-header border-0 custom-modal-header">
+                                                        <div class="modal-header border-0 custom-modal-header justify-content-between">
                                                             <div class="page-title">
                                                                 <h4>Edit Rack</h4>
                                                             </div>
@@ -97,6 +101,30 @@
                                         </div>
                                     </div>
                                     <!-- Edit Brand -->
+                                    <!-- Rack Products Modal -->
+                                    <div class="modal fade" id="drawers-{{ $rack->id }}">
+                                        <div class="modal-dialog modal-dialog-centered custom-modal-two">
+                                            <div class="modal-content">
+                                                <div class="page-wrapper-new p-0">
+                                                    <div class="content">
+                                                        <div class="modal-header border-0 custom-modal-header justify-content-between">
+                                                            <div class="page-title">
+                                                                <h4>Rack Detail</h4>
+                                                            </div>
+                                                            <button type="button" class="close" data-bs-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body custom-modal-body new-employee-field">
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Rack Products Modal -->
                                 @endforeach
 
                             </tbody>
@@ -114,7 +142,7 @@
             <div class="modal-content">
                 <div class="page-wrapper-new p-0">
                     <div class="content">
-                        <div class="modal-header border-0 custom-modal-header">
+                        <div class="modal-header border-0 custom-modal-header justify-content-between">
                             <div class="page-title">
                                 <h4>Create Rack</h4>
                             </div>
