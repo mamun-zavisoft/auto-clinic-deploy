@@ -126,45 +126,12 @@
                                                         </div>
                                                         
                                                         <div class="col-md-4">
-                                                            <div class="card h-100">
-                                                                <div class="card-body">
-                                                                    <h5 class="card-title fw-bold mb-3">Service Info</h5>
-                                                                    <div class="row mb-2">
-                                                                        <div class="col-md-5 fw-bold">Reference No:</div>
-                                                                        <div class="col-md-7">45-GYP-46</div>
-                                                                    </div>
-                                                                    <div class="row mb-2">
-                                                                        <div class="col-md-5 fw-bold">Service Type:</div>
-                                                                        <div class="col-md-7">
-                                                                            <span class="text-{{ $service->service_type == 1 ? 'success' : 'warning' }}">
-                                                                                    {{ $service->service_type == 1 ? 'Self' : 'External' }}
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row mb-2">
-                                                                        <div class="col-md-5 fw-bold">Payment Status:</div>
-                                                                        <div class="col-md-7">
-                                                                            <span class="badge bg-{{ $service->payment_status == 'paid' ? 'success' : 'warning' }}">
-                                                                                {{ ucfirst($service->payment_status ?? 'N/A') }}
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-md-5 fw-bold">Service Date:</div>
-                                                                        <div class="col-md-7">{{ $service->created_at?->format('d M Y') ?? 'N/A' }}</div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="col-md-4">
                                                         <div class="card h-100">
                                                             <div class="card-body">
                                                                 <h5 class="card-title fw-bold mb-3">Service Info</h5>
                                                                 <div class="row mb-2">
-                                                                    <div class="col-md-5 fw-bold">Reference No:</div>
-                                                                    <div class="col-md-7">45-GYP-46</div>
+                                                                    <div class="col-md-5 fw-bold">Invoice NO:</div>
+                                                                    <div class="col-md-7">{{  $service->transaction_id }}</div>
                                                                 </div>
                                                                 <div class="row mb-2">
                                                                     <div class="col-md-5 fw-bold">Service Type:</div>
@@ -193,6 +160,9 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    </div>
+                                                    
+                                                    
                                                 </div>
                                                 
                                                 <!-- Service Details Section -->
