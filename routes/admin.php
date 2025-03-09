@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchasesDetailController;
 use App\Http\Controllers\RackController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ServiceChartController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ServiceDetailController;
@@ -35,6 +36,7 @@ Route::middleware('auth')->name('admin.')->group(function () {
     Route::resource('/accounts', AccountController::class);
     Route::resource('/vehicles', VehiclesController::class);
     Route::resource('/services', ServiceController::class);
+    Route::resource('/sales', SaleController::class);
      
     // single action routes
     Route::get('/product/search', [ProductController::class, 'search'])->name('products.search');
@@ -46,6 +48,7 @@ Route::middleware('auth')->name('admin.')->group(function () {
     Route::get('/drawers/fetch/{rackId}', [DrawerController::class, 'fetchDrawersByRack'])->name('racks.fetchDrawers');
     Route::get('/purchase/view/payments/{id}', [PurchaseController::class, 'view_payments'])->name('purchase.view.payments');
     Route::get('/service/view/payments/{id}', [ServiceController::class, 'view_payments'])->name('service.view.payments');
+    Route::get('/search/vehicle', [VehiclesController::class, 'searchVehicle'])->name('search.vehicle');
 
     
     // system general settings

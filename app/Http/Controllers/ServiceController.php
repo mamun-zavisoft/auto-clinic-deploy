@@ -10,6 +10,7 @@ use App\Models\Service;
 use App\Models\ServiceChart;
 use App\Models\ServiceDetail;
 use App\Models\Vehicle;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -19,12 +20,11 @@ class ServiceController extends Controller
 
     public function index()
     {
-        $services = Service::with('vehicle')->get();
+        $services = Service::with('vehicle', 'sale')->orderBy('id', 'desc')->get();
         $serviceCharts = ServiceChart::select('id','name','price','code')->get();
         $serviceDetails = ServiceDetail::select('service_id', 'service_chart_id', 'price')->get();
-        $sales = Sale::with('product', 'saleDetails')->get();
 
-        return view('backend.services.index', compact('services','serviceCharts','serviceDetails', 'sales'));
+        return view('backend.services.index', compact('services','serviceCharts','serviceDetails'));
     }
     /**
      * Display the service creation form
@@ -63,6 +63,13 @@ class ServiceController extends Controller
                 'account_id' => 'nullable|exists:accounts,id|required_if:payment_type,partial_paid,full_paid',
                 'amount' => 'nullable|numeric|min:1|required_if:payment_type,partial_paid,full_paid',
             ]);
+
+            $vehicle = Vehicle::find($request->vehicle_id);
+            $owner_type = $request->service_type == 'self' ? '1' : '2';
+
+            if ($vehicle && $vehicle->owner_type != $owner_type) {
+                return response()->json(['message' => 'Invalid vehicle selection!', 'type' => 'error'], 422);
+            }
             
             DB::beginTransaction();
 
@@ -99,6 +106,27 @@ class ServiceController extends Controller
                 $account->save();
             }
 
+            $amount = 0;
+            if ($request->payment_type == 'full_paid') {
+                $amount = $service->grand_total;
+            }
+
+            $payment = $service->payment()->create([
+                'transaction_type' => 'service',
+                'grand_total' => $request->grand_total,
+                'due_amount' => $request->grand_total - $request->amount ?? 0,
+                'paid_amount' => $request->amount ?? $amount,
+                'paid_status' => $request->service_type == 'self' ? 'in_house': $this->calculatePaidStatus($request->grand_total, $request->amount),
+            ]);
+            if($payment && $request->amount > 0){
+                $payment->paymentDetails()->create([
+                    'account_id' => $request->account_id,
+                    'amount' => $request->amount ?? $amount,
+                    'date' => $request->payment_date,
+                    'note' => $request->note,
+                ]);
+            }
+           
             // Process parts if any
             if ($request->any_parts_purchase && !empty($request->parts)) {
 
@@ -147,6 +175,9 @@ class ServiceController extends Controller
                             ->where('id', $history->id)
                             ->update(['sale_id' => $sale->id]); 
                     }
+                    DB::table('products')
+                        ->where('id', $part['product_id'])
+                        ->decrement('total_available_qty', $part['quantity']);
 
                     $sale->SaleDetails()->create([
                         'product_id' => $part['product_id'],
@@ -220,5 +251,91 @@ class ServiceController extends Controller
         $service = Service::find($id);
         $accounts = Account::select('id', 'name', 'balance')->get();
         return view('backend.services.view_payments', compact('service', 'accounts'));
+    }
+
+    public function payment(Request $request, $id)
+    {
+        $service = Service::findOrFail($id);
+        $request->validate([
+            'payment_type' => 'required|in:partial_paid,full_paid',
+            'account_id' => 'nullable|exists:accounts,id|required_if:payment_type,partial_paid,full_paid',
+            'amount' => 'nullable|numeric|min:1|required_if:payment_type,partial_paid,full_paid',
+            'payment_date' => 'nullable|date|before_or_equal:today',
+            'note' => 'nullable|string',
+        ], [
+            'account_id.required_if' => 'The account field is required when payment type is partial paid or full paid.',
+            'amount.required_if' => 'The amount field is required when payment type is partial paid or full paid.',
+        ]);
+
+        try {
+            
+            // If payment type is full_due
+            if ($request->payment_type == 'full_due') {
+                return response()->json(['message' => 'Invalid payment type', 'type' => 'error'], 422);
+            }
+            
+            // For partial_paid or full_paid
+            $account = Account::find($request->account_id);
+            if (!$account) {
+                return response()->json(['message' => 'Account not found', 'type' => 'error'], 422);
+            }
+            
+            if ($request->amount > $account->balance) {
+                return response()->json(['message' => 'Payment amount cannot be greater than account balance ' . $account->balance, 'type' => 'error'], 422);
+            }
+            
+            if ($request->payment_type == 'partial_paid' && $request->amount > $service->due_amount) {
+                return response()->json(['message' => 'Payment amount cannot be greater than due amount ' . $service->due_amount, 'type' => 'error'], 422);
+            }
+            
+            DB::beginTransaction();
+            $latest_due_amount = $service->due_amount - $request->amount;
+            $total_paid_amount = $service->paid_amount + $request->amount;
+
+            $paid_status = $total_paid_amount < $service->grand_total ? 'partial_paid' : 'full_paid';
+
+            // Update service record
+            $service->update([
+                'due_amount' => $latest_due_amount,
+                'paid_amount' => $total_paid_amount,
+                'paid_status' => $paid_status,
+            ]);
+
+            // Update account balance
+            $account->balance = $account->balance + $request->amount;
+            $account->save();
+
+            if ($request->payment_type == 'full_paid') {
+                $amount = $service->grand_total - $service->paid_amount;
+            }
+
+            // Update payment record and add payment detail
+            $payment = $service->payment;
+            if ($payment) {
+                $payment->update([
+                    'due_amount' => $latest_due_amount,
+                    'paid_amount' => $total_paid_amount,
+                    'paid_status' => $paid_status,
+                ]);
+
+                $payment->paymentDetails()->create([
+                    'account_id' => $request->account_id,
+                    'amount' => $request->amount ?? $amount,
+                    'date' => $request->payment_date,
+                    'note' => $request->note,
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Payment created successfully.',
+                'type' => 'success',
+                'redirectUrl' =>  route('admin.services.index'),
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 }

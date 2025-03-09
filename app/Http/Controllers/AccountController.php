@@ -55,14 +55,14 @@ class AccountController extends Controller
             $request->validate([
                 'name' => 'required|string|max:50,' . $account->id,
                 'type' => 'required|numeric',
-                'balance' => 'nullable|numeric|min:0,' . $account->id
+                // 'balance' => 'nullable|numeric|min:0,' . $account->id
             ]);
     
     
             $account->update([
                 'name' => $request->name,
                 'type' => $request->type,
-                'balance' => 0
+                // 'balance' => $request->balance
             ]);
     
             return response()->json(['message' => 'Account updated successfully!', 'type' => 'success'],200);

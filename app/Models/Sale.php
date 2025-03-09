@@ -23,8 +23,28 @@ class Sale extends Model
         return $this->hasOne(Payment::class);
     }
 
-    public function product()
+    public function scopeOnlySales($query)
     {
-        return $this->belongsTo(Product::class);
+        return $query->where('type', 'only_sale');
     }
+
+    public function scopeSelf($query)
+    {
+        return $query->where('type', 'self');
+    }
+
+    public function scopeExternal($query)
+    {
+        return $query->where('type', 'external');
+    }
+
+   public function service()
+   {
+       return $this->hasOne(Service::class);
+   }
+
+   public function products()
+   {
+       return $this->hasManyThrough(Product::class, SaleDetail::class, 'sale_id', 'id', 'id', 'product_id');
+   }
 }
