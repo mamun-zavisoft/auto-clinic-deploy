@@ -110,12 +110,12 @@
                                     data-feather="settings"></i><span>General
                                     Settings</span><span class="menu-arrow"></span></a>
                             <ul>
-                                <li><a href="{{ url('general-settings') }}"
-                                        class="{{ Request::is('general-settings') ? 'active' : '' }}">Profile</a>
+                                <li><a href="{{ url('profile') }}"
+                                        class="{{ Request::is('profile') ? 'active' : '' }}">Profile</a>
                                 </li>
-                                <li><a href="{{ url('security-settings') }}"
+                                <!-- <li><a href="{{ url('security-settings') }}"
                                         class="{{ Request::is('security-settings') ? 'active' : '' }}">Security</a>
-                                </li>
+                                </li> -->
                                 {{-- add new here --}}
                             </ul>
                         </li>
