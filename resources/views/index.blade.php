@@ -50,13 +50,14 @@
                 </div>
                 <div class="row">
                     <div class="col-xl-3 col-sm-6 col-12 d-flex">
-                        <a href="{{ url('vehicles') }}" class="dash-count text-decoration-none w-100 vehicle" style="text-decoration: none; color: inherit;">
+                        <a href="{{ url('vehicles') }}" class="dash-count text-decoration-none w-100 vehicle"
+                            style="text-decoration: none; color: inherit;">
                             <div class="dash-counts text-start">
                                 <h5>Vehicle</h5>
                                 <h4 class="mb-2">{{ $totalVehicle }}</h4>
                                 <div class="d-flex justify-content-center align-items-center mt-2 text-white">
-                                    <span class="me-3">Self: {{ $selfVehicle }}</span> 
-                                    <div style="width: 2px; height: 20px; background: white; margin: 0 10px;"></div> 
+                                    <span class="me-3">Self: {{ $selfVehicle }}</span>
+                                    <div style="width: 2px; height: 20px; background: white; margin: 0 10px;"></div>
                                     <span class="ms-3">Outside: {{ $outsideVehicle }}</span>
                                 </div>
                             </div>

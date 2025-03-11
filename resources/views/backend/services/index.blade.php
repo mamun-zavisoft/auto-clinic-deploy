@@ -96,6 +96,7 @@
                                             <div class="modal-content">
                                                 <!-- Modal Header -->
                                                 <div class="modal-header border-0 custom-modal-header">
+                                                <div class="modal-header border-0 custom-modal-header justify-content-between">
                                                     <div class="page-title">
                                                         <h4>Service Details</h4>
                                                     </div>
@@ -140,42 +141,45 @@
                                                                         <div class="col-md-7">
                                                                             <span class="text-{{ $service->service_type == 1 ? 'success' : 'warning' }}">
                                                                                 {{ $service->service_type == 1 ? 'Self' : 'External' }}
-                                                                            </span>
-                                                                        </div>
+                                                                        </span>
                                                                     </div>
-                                                                    <div class="row mb-2">
-                                                                        <div class="col-md-5 fw-bold">Payment Type:</div>
-                                                                        <div class="col-md-7">{{ $service->payment_type_id ?? 'N/A' }}</div>
+                                                                </div>
+                                                                <div class="row mb-2">
+                                                                    <div class="col-md-5 fw-bold">Payment Type:</div>
+                                                                    <div class="col-md-7">{{ $service->payment_type_id ?? 'N/A' }}</div>
+                                                                </div>
+                                                                <div class="row mb-2">
+                                                                    <div class="col-md-5 fw-bold">Payment Status:</div>
+                                                                    <div class="col-md-7">
+                                                                        <span class="badge bg-{{ $service->paid_status == 'full_paid' ? 'success' : 'warning' }}">
+                                                                            {{ ucwords(str_replace('_', ' ', $service->paid_status ?? 'N/A')) }}
+                                                                        </span>
                                                                     </div>
-                                                                    <div class="row mb-2">
-                                                                        <div class="col-md-5 fw-bold">Payment Status:</div>
-                                                                        <div class="col-md-7">
-                                                                            <span class="badge bg-{{ $service->paid_status == 'full_paid' ? 'success' : 'warning' }}">
-                                                                                {{ ucwords(str_replace('_', ' ', $service->paid_status ?? 'N/A')) }}
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <div class="col-md-5 fw-bold">Service Date:</div>
-                                                                        <div class="col-md-7">{{ $service->created_at?->format('d M Y') ?? 'N/A' }}</div>
-                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-5 fw-bold">Service Date:</div>
+                                                                    <div class="col-md-7">{{ $service->created_at?->format('d M Y') ?? 'N/A' }}</div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <!-- Service Details Section -->
-                                                    <div class="card mb-4">
-                                                        <div class="card-header bg-light">
-                                                            <h5 class="card-title fw-bold m-0">Service Details</h5>
+                                                    </div>
+                                                    
+                                                    
+                                                </div>
+                                                
+                                                <!-- Service Details Section -->
+                                                <div class="card mb-4">
+                                                    <div class="card-header bg-light">
+                                                        <h5 class="card-title fw-bold m-0">Service Details</h5>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <!-- Table Head -->
+                                                        <div class="d-flex fw-bold border-bottom pb-2" style="display: flex; flex-wrap: wrap;">
+                                                            <div class="p-2" style="flex: 1;">Service Name</div>
+                                                            <div class="p-2" style="flex: 1;">Unit Price</div>
+                                                            <div class="p-2" style="flex: 1;">Code</div>
                                                         </div>
-                                                        <div class="card-body ms-0">
-                                                            <!-- Table Head -->
-                                                            <div class="d-flex fw-bold border-bottom pb-2" style="display: flex; flex-wrap: wrap;">
-                                                                <div class="p-2" style="flex: 1;">Service Name</div>
-                                                                <div class="p-2" style="flex: 1;">Unit Price</div>
-                                                                <div class="p-2" style="flex: 1;">Code</div>
-                                                            </div>
 
                                                             <!-- Table Body -->
                                                             @foreach($service->serviceDetails as $data)
@@ -188,20 +192,20 @@
                                                         </div>
                                                     </div>
 
-                                                    <!-- Products Used Section -->
-                                                    @if($service->sale)
-                                                        <div class="card mb-4">
-                                                            <div class="card-header bg-light">
-                                                                <h5 class="card-title fw-bold m-0">Products Used</h5>
+                                                <!-- Products Used Section -->
+                                                @if($service->sale)
+                                                    <div class="card mb-4">
+                                                        <div class="card-header bg-light">
+                                                            <h5 class="card-title fw-bold m-0">Products Used</h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <!-- Table Head -->
+                                                            <div class="d-flex fw-bold border-bottom pb-2" style="display: flex; flex-wrap: wrap;">
+                                                                <div class="p-2" style="flex: 2;">Product Name</div>
+                                                                <div class="p-2" style="flex: 1;">Price</div>
+                                                                <div class="p-2" style="flex: 1;">Quantity</div>
+                                                                <div class="p-2" style="flex: 1;">Total Price</div>
                                                             </div>
-                                                            <div class="card-body ms-0">
-                                                                <!-- Table Head -->
-                                                                <div class="d-flex fw-bold border-bottom pb-2" style="display: flex; flex-wrap: wrap;">
-                                                                    <div class="p-2" style="flex: 2;">Product Name</div>
-                                                                    <div class="p-2" style="flex: 1;">Price</div>
-                                                                    <div class="p-2" style="flex: 1;">Quantity</div>
-                                                                    <div class="p-2" style="flex: 1;">Total Price</div>
-                                                                </div>
 
                                                                 <!-- Table Body -->
                                                                 @foreach($service->sale?->saleDetails as $saleDetail)
@@ -286,7 +290,7 @@
                                 <div class="modal-content" style="width: auto; padding-bottom: 50px;">
                                     <div class="page-wrapper-new p-0">
                                         <div class="content">
-                                            <div class="modal-header border-0 custom-modal-header">
+                                            <div class="modal-header border-0 custom-modal-header justify-content-between">
                                                 <div class="page-title">
                                                     <h4>Service Payments</h4>
                                                 </div>
