@@ -8,7 +8,7 @@
             <!-- /Filter -->
             <div class="card table-list-card">
                 <x-filter>
-                    <div class="col-lg-4 col-sm-3 col-12" style="width: 300px;">
+                    <div class="col-lg-4 col-sm-3 col-12" style="width: 200px;">
                         <div class="mb-3 add-product">
                             <div class="add-newplus">
                                 <label class="form-label">Category</label>
@@ -21,7 +21,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-3 col-12 ms-2" style="width: 300px;">
+                    <div class="col-lg-4 col-sm-3 col-12 ms-2" style="width: 200px;">
                         <div class="mb-3 add-product">
                             <div class="add-newplus">
                                 <label class="form-label">Brand</label>
