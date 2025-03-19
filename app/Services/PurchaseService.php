@@ -15,8 +15,7 @@ class PurchaseService
     {   
         $search = request()->input('search', '');
         $supplier_id = request()->input('supplier_id', '');
-        $type = request()->input('status_type', '');
-        $status_type = $type === 'pending' ? 'pending' : 'received';
+        $statusType = request()->input('statusType', '');
 
         return Purchase::query()
         ->with('supplier:id,name', 'zone:id,name')
@@ -31,9 +30,9 @@ class PurchaseService
         ->when($supplier_id, function ($query) use ($supplier_id) {
             $query->where('supplier_id', $supplier_id);
         })
-        // ->when($status_type, function ($query) use ($status_type) {
-        //     $query->where('status', $status_type);
-        // })
+        ->when($statusType, function ($query) use ($statusType) {
+            $query->where('status', $statusType);
+        })
             ->orderBy('id', 'desc')
             ->paginate($perPage);
     }

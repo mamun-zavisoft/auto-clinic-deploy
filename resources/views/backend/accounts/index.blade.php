@@ -14,10 +14,10 @@
                                 <div class="add-newplus">
                                     <label class="form-label">Account Type</label>
                                 </div>
-                                <select class="select" name="account_type">
+                                <select class="select" name="account_Type">
                                     <option value="">Choose</option>
-                                    <option value="cash" @selected(request()->account_type == 'cash')>Cash</option>
-                                    <option value="bank" @selected(request()->account_type == 'bank')>Bank</option>
+                                    <option value="cash" @selected(request()->account_Type == 'cash')>Cash</option>
+                                    <option value="bank" @selected(request()->account_Type == 'bank')>Bank</option>
                                 </select>
                             </div>
                         </div>

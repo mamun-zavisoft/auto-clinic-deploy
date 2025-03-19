@@ -26,11 +26,11 @@
                                 <div class="add-newplus">
                                     <label class="form-label">Status</label>
                                 </div>
-                                <select class="select" name="status_type">
+                                <select class="select" name="statusType">
                                     <option value="">Choose</option>
-                                    <option value="pending" @selected(request()->status == 'pending')>Pending</option>
-                                    <option value="received" @selected(request()->status == 'received')>Store in Drawer</option>
-                                    <option value="stored" @selected(request()->status == 'stored')>Stored</option>
+                                    <option value="pending" @selected(request()->statusType == 'pending')>Pending</option>
+                                    <option value="received" @selected(request()->statusType == 'received')>Received</option>
+                                    <option value="stored" @selected(request()->statusType == 'stored')>Stored</option>
                                 </select>
                             </div>
                         </div>

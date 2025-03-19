@@ -10,8 +10,7 @@ class FetchService
 
         $search = request()->input('search', '');
         $perPage = request()->input('per_page', 10);
-        $type = request()->input('serviceType', '');
-        $serviceType = $type === 'self' ? 'self' : 'external';
+        $serviceType = request()->input('serviceType', '');
 
         return Service::query()
             ->with('vehicle:id,license_plate','account:id,type','sale')

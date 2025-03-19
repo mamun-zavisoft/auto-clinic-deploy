@@ -13,12 +13,10 @@ class AccountController extends Controller
     public function index(Request $request)
     {
         $accounts = (new FetchAccount)->execute($request);
-
         if ($request->ajax()) {
             return view('components.accounts.table', ['entity' => $accounts])->render();
         }
         return view('backend.accounts.index', compact('accounts'));
-
     }
 
 
