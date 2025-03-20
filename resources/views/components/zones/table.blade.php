@@ -1,12 +1,12 @@
-@foreach ($entity as $zone)
+@forelse ($entity as $zone)
     <tr>
         <td>
-            {{ $loop->iteration + $zones->firstItem() - 1 }}
+            {{ $loop->iteration + $entity->firstItem() - 1 }}
         </td>
         <td>{{ $zone->name }}</td>
         <td>{{ $zone->phone }}</td>
         <td>{{ $zone->location }}</td>
-        <td>{{ $zone->created_at->format('d M Y') }}</td>
+        <td>{{ $zone->created_at?->format('d M Y') }}</td>
         <td class="action-table-data">
             <div class="edit-delete-action">
                 <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-zone-{{ $zone->id }}">
@@ -71,4 +71,8 @@
         </div>
     </div>
     <!-- Edit Brand -->
-@endforeach
+@empty
+    <tr class="text-center">
+        <td colspan="7">No Zones Found</td>
+    </tr>
+@endforelse

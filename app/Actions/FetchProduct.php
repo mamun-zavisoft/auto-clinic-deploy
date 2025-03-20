@@ -12,7 +12,7 @@ class FetchProduct
         $perPage = $request->input('per_page', 10);
         $brand_id = $request->input('brand_id', '');
         $category_id = $request->input('category_id', '');
-
+        
         return Product::query()
             ->with('media', 'category:id,name', 'brand:id,name')
             ->when($search, function ($query, $search) {
@@ -24,7 +24,7 @@ class FetchProduct
             ->when($category_id, function ($query, $category_id) {
                 $query->where('category_id', $category_id);
             })
-            // ->select('id', 'name', 'created_at')
+            ->select('id', 'name', 'sale_price', 'category_id', 'brand_id', 'created_at')
             ->orderBy('id', 'desc')->paginate($perPage)->withQueryString();
     }
 }

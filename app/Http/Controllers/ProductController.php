@@ -28,7 +28,7 @@ class ProductController extends Controller
         $brands = Brand::select('id','name')->get();
         
         if ($request->ajax()) {
-            return view('components.products.table', ['entity' => $products])->render();
+            return view('components.products.table', ['products' => $products])->render();
         }
 
         return view('backend.products.index', compact('products','categories','brands'));

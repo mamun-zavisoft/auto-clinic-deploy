@@ -15,7 +15,7 @@ class ServiceChartController extends Controller
         $serviceCharts = (new FetchServiceChart)->execute($request);
 
         if ($request->ajax()) {
-            return view('components.serviceCharts.table', ['entity' => $serviceCharts])->render();
+            return view('components.serviceCharts.table', ['serviceCharts' => $serviceCharts])->render();
         }
 
         return view('backend.serviceCharts.index', compact('serviceCharts'));

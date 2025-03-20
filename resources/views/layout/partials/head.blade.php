@@ -61,6 +61,9 @@
 <!-- Select2 CSS -->
 <link rel="stylesheet" href="{{ url('build/plugins/select2/css/select2.min.css') }}">
 
+<!-- Toggle button css -->
+ <link rel="stylesheet" href="{{ url('build/css/toggle.css') }}">
+
 
 <!-- Feathericon CSS -->
 <link rel="stylesheet" href="{{ url('build/css/feather.css') }}">

@@ -14,7 +14,7 @@ class BrandController extends Controller
     {
         $brands = (new FetchBrand)->execute($request);
         if ($request->ajax()) {
-            return view('components.brands.table', ['entity' => $brands])->render();
+            return view('components.brands.table', ['brands' => $brands])->render();
         }
 
         return view('backend.brands.index', compact('brands'));

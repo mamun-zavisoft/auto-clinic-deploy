@@ -14,7 +14,7 @@ class AccountController extends Controller
     {
         $accounts = (new FetchAccount)->execute($request);
         if ($request->ajax()) {
-            return view('components.accounts.table', ['entity' => $accounts])->render();
+            return view('components.accounts.table', ['accounts' => $accounts])->render();
         }
         return view('backend.accounts.index', compact('accounts'));
     }

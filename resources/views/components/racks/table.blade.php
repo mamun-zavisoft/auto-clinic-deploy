@@ -1,4 +1,4 @@
-@foreach ($entity as $rack)
+@forelse ($racks as $rack)
     <tr>
         <td>
             {{ $loop->iteration + $racks->firstItem() - 1 }}
@@ -22,7 +22,7 @@
         </td>
     </tr>
 
-    <!-- Edit Brand -->
+    <!-- Edit Rack -->
     <div class="modal fade" id="edit-rack-{{ $rack->id }}">
         <div class="modal-dialog modal-dialog-centered custom-modal-two">
             <div class="modal-content">
@@ -58,5 +58,9 @@
             </div>
         </div>
     </div>
-    <!-- Edit Brand -->
-@endforeach
+    <!-- Edit Rack -->
+@empty
+    <tr class="text-center">
+        <td colspan="7">No Brand Found</td>
+    </tr>
+@endforelse

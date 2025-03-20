@@ -1,4 +1,4 @@
-@foreach ($entity as $serviceChart)
+@forelse ($serviceCharts as $serviceChart)
     <tr>
         <td>
             {{ $loop->iteration + $serviceCharts->firstItem() - 1 }}
@@ -7,7 +7,7 @@
         <td>{{ $serviceChart->price }}</td>
         <td>{{ $serviceChart->code }}</td>
         <td>{{ $serviceChart->description }}</td>
-        <td>{{ $serviceChart->created_at->format('d M Y') }}</td>
+        <td>{{ $serviceChart->created_at?->format('d M Y') }}</td>
         <td class="action-table-data">
             <div class="edit-delete-action">
                 <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-serviceChart-{{ $serviceChart->id }}">
@@ -21,11 +21,10 @@
                     </a>
                 </form>
             </div>
-
         </td>
     </tr>
 
-    <!-- Edit Brand -->
+    <!-- Edit ServiceChart -->
     <div class="modal fade" id="edit-serviceChart-{{ $serviceChart->id }}">
         <div class="modal-dialog modal-dialog-centered custom-modal-two">
             <div class="modal-content">
@@ -45,30 +44,25 @@
                                 @method('PUT')
                                 <div class="mb-3">
                                     <label class="form-label">Name*</label>
-                                    <input type="text" class="form-control" value="{{ $serviceChart->name }}"
-                                        name="name">
+                                    <input type="text" class="form-control" value="{{ $serviceChart->name }}" name="name">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Price*</label>
-                                    <input type="text" class="form-control" value="{{ $serviceChart->price }}"
-                                        name="price">
+                                    <input type="text" class="form-control" value="{{ $serviceChart->price }}" name="price">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Code*</label>
-                                    <input type="text" class="form-control"
-                                        value="{{ $serviceChart->code }}" name="code">
+                                    <input type="text" class="form-control" value="{{ $serviceChart->code }}" name="code">
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="input-blocks summer-description-box transfer mb-3">
                                         <label>Description</label>
-                                        <textarea class="form-control h-100" rows="5" name="description"></textarea>
+                                        <textarea class="form-control h-100" rows="5" name="description">{{ $serviceChart->description }}</textarea>
                                     </div>
                                 </div>
                                 <div class="modal-footer-btn">
-                                    <button type="button" class="btn btn-cancel me-2"
-                                        data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-submit">Save
-                                        Changes</button>
+                                    <button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-submit">Save Changes</button>
                                 </div>
                             </form>
                         </div>
@@ -77,5 +71,8 @@
             </div>
         </div>
     </div>
-    <!-- Edit Brand -->
-@endforeach
+@empty
+    <tr class="text-center">
+        <td colspan="7">No ServiceCharts Found</td>
+    </tr>
+@endforelse

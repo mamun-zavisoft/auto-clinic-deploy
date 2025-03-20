@@ -1,21 +1,34 @@
-@foreach ($entity as $product)
+@forelse ($products as $product)
     <tr>
         <td>
             {{ $loop->iteration + $products->firstItem() - 1 }}
         </td>
-        <td>{{ $product->name }}</td>
-        <td><span class="d-flex"><img src="{{ URL::asset('/build/img/product/product-icon-01.png') }}" alt=""></span>
+        <td>
+            <div class="productimgname">
+                <a href="javascript:void(0);" class="product-img stock-img">
+                    <img src="{{ $product->thumbnail ?: asset('build/img/no-image.svg') }}"
+                        alt="product">
+                </a>
+                <a href="javascript:void(0);">{{ $product->name }}</a>
+            </div>
         </td>
-        <td>{{ $product->created_at->format('d M Y') }}</td>
-        <td><span
-                class="badge rounded-pill bg-outline-{{ $product->status == 1 ? 'success' : 'warning' }}">{{ $product->status == 1 ? 'Active' : 'Inactive' }}</span>
-        </td>
+        <td>{{ $product->category?->name }}</td>
+        <td>{{ $product->brand?->name }}</td>
+        <td>৳ {{ $product->sale_price }}</td>
+        <td>{{ $product->total_available_quantity }}</td>
         <td class="action-table-data">
             <div class="edit-delete-action">
-                <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-product-{{ $product->id }}">
+                <a class="me-2 edit-icon  p-2" href="{{ url('product-details') }}"
+                    data-bs-toggle="modal" data-bs-target="#products-{{ $product->id }}">
+                    <i data-feather="eye" class="feather-eye"></i>
+                </a>
+                {{-- @permission('product-update') --}}
+                <a class="me-2 p-2" href="{{ route('admin.products.edit', $product->id) }}">
                     <i data-feather="edit" class="feather-edit"></i>
                 </a>
-                <form action="{{ route('admin.products.destroy', $product->id) }}" method="post" class="delete-form">
+                {{-- @endpermission --}}
+                <form action="{{ route('admin.products.destroy', $product->id) }}"
+                    class="delete-form" method="post">
                     @csrf
                     @method('DELETE')
                     <a class="confirm-text2 p-2" href="javascript:void(0);">
@@ -23,7 +36,6 @@
                     </a>
                 </form>
             </div>
-
         </td>
     </tr>
 
@@ -80,4 +92,8 @@
         </div>
     </div>
     <!-- Edit product -->
-@endforeach
+@empty
+    <tr class="text-center">
+        <td colspan="7">No Product Found</td>
+    </tr>
+@endforelse
