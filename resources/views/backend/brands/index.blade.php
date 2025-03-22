@@ -272,28 +272,28 @@
             });
 
             $('.status-checkbox').on('change', function(e) {
-            e.preventDefault();
-            var form = $(this).closest('form');
-            var statusLabel = form.find('.status-label');
-            var currentStatus = form.find('input[name="status"]').val();
-            var newStatus = currentStatus === '1' ? '0' : '1';
-                        
-            form.find('input[name="status"]').val(newStatus);
-            statusLabel.text(newStatus === '1' ? 'Active' : 'Inactive');
+                var form = $(this).closest('form');
+                var statusLabel = form.find('.status-label');
+                var currentStatus = form.find('input[name="status"]').val();
+                var newStatus = currentStatus === '1' ? '0' : '1';
+                            
+                form.find('input[name="status"]').val(newStatus);
+                statusLabel.text(newStatus === '1' ? 'Active' : 'Inactive');
 
-            $.ajax({
-                url: form.attr('action'),
-                method: form.attr('method'),
-                data: form.serialize(),
-            }).done(function(response) {
-                if (response.type == 'success') {
-                    toastr.success(response.message);
-                } else {
-                    toastr.error(response.message);
-                }
-            })
+                $.ajax({
+                    url: form.attr('action'),
+                    method: form.attr('method'),
+                    data: form.serialize(),
+                }).done(function(response) {
+                    if (response.type == 'success') {
+                        toastr.success(response.message);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                })
+            });
         });
 
-    });
+    
     </script>
 @endpush
