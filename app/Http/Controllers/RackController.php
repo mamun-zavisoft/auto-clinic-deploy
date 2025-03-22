@@ -19,7 +19,7 @@ class RackController extends Controller
         $zones = Zone::select('id', 'name')->get();
 
         if ($request->ajax()) {
-            return response()->json($racks);
+            return view('components.racks.table', ['racks' => $racks])->render();
         }
 
         return view('backend.racks.index', compact('racks', 'zones'));

@@ -15,7 +15,7 @@ class ServiceChartController extends Controller
         $serviceCharts = (new FetchServiceChart)->execute($request);
 
         if ($request->ajax()) {
-            return view('components.serviceCharts.table', ['entity' => $serviceCharts])->render();
+            return view('components.serviceCharts.table', ['serviceCharts' => $serviceCharts])->render();
         }
 
         return view('backend.serviceCharts.index', compact('serviceCharts'));
@@ -59,6 +59,10 @@ class ServiceChartController extends Controller
                 'description' => 'nullable|string|max:4000,' . $serviceChart->id,
                 'code' => 'required|string|max:50|unique:service_charts,code,' . $serviceChart->id
             ]);
+
+            if ($request->price > 14) {
+                return response()->json(['message' => 'Balance must be less than 14', 'type' => 'error']);
+            }
 
             $serviceChart->update([
                 'name' =>$request->name,

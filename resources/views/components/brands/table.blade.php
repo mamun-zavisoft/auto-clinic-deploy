@@ -1,21 +1,31 @@
-@foreach ($entity as $brand)
+@forelse ($brands as $brand)
     <tr>
         <td>
             {{ $loop->iteration + $brands->firstItem() - 1 }}
         </td>
         <td>{{ $brand->name }}</td>
-        <td><span class="d-flex"><img src="{{ URL::asset('/build/img/brand/brand-icon-01.png') }}" alt=""></span>
-        </td>
+        <td><span class="d-flex"><img src="{{ $brand->image ?: asset('build/img/no-image.svg') }}"
+                    style="width: 50px; height: 50px;" alt=""></span></td>
         <td>{{ $brand->created_at->format('d M Y') }}</td>
-        <td><span
-                class="badge rounded-pill bg-outline-{{ $brand->status == 1 ? 'success' : 'warning' }}">{{ $brand->status == 1 ? 'Active' : 'Inactive' }}</span>
+        <td>
+            <form class="status-form" action="{{ route('admin.brands.status', $brand->id) }}" method="POST" data-id="{{ $brand->id }}">
+                @csrf
+                @method('PATCH')
+                <label class="toggle-switch">
+                    <input type="checkbox" class="status-checkbox" {{ $brand->status == '1' ? 'checked' : '' }}>
+                    <span class="slider"></span>
+                </label>
+                <input type="hidden" name="status" value="{{ $brand->status }}">
+            </form>
         </td>
         <td class="action-table-data">
             <div class="edit-delete-action">
-                <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-brand-{{ $brand->id }}">
+                <a class="me-2 p-2" href="#" data-bs-toggle="modal"
+                    data-bs-target="#edit-brand-{{ $brand->id }}">
                     <i data-feather="edit" class="feather-edit"></i>
                 </a>
-                <form action="{{ route('admin.brands.destroy', $brand->id) }}" method="post" class="delete-form">
+                <form action="{{ route('admin.brands.destroy', $brand->id) }}"
+                    method="post" class="delete-form">
                     @csrf
                     @method('DELETE')
                     <a class="confirm-text2 p-2" href="javascript:void(0);">
@@ -80,4 +90,8 @@
         </div>
     </div>
     <!-- Edit Brand -->
-@endforeach
+@empty
+    <tr class="text-center">
+        <td colspan="7">No Brand Found</td>
+    </tr>
+@endforelse

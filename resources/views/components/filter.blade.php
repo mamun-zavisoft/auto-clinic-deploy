@@ -1,4 +1,4 @@
-<form action="" method="get">
+<form action="{{ request()->url() }}" method="get" id="filter-form">
     <div class="table-top">
         {{-- custom filter --}}
         <div class="d-flex flex-wrap">
@@ -11,10 +11,50 @@
                 <div class="search-input ms-3">
                     <a href="javascript:void(0);" class="btn btn-searchset"><i data-feather="search"
                             class="feather-search"></i></a>
-                    <input type="search" name="search" class="form-control form-control-sm" placeholder="Search" value="{{ request('search') }}">
+                    <input type="search" name="search" class="form-control form-control-sm" placeholder="Search" value="{{ request('search') }}" autocomplete="off">
                 </div>
-                <button type="submit" class="btn btn-secondary rounded-pill custom-submit-btn">filter</button>
+                <button type="submit" id="reset-filter" class="btn btn-secondary rounded-pill custom-submit-btn">Reset</button>
             </div>
         </div>
     </div>
 </form>
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        let form = $('#filter-form');
+        let formAction = form.attr('action');
+
+        $('input[name="search"]').on('input', function() {
+            sendAjaxRequest();
+        });
+
+        $(document).on('change', '.filter-input', function() {
+            sendAjaxRequest();
+        });
+
+        $('#reset-filter').on('click', function(e) {
+            e.preventDefault();
+            $('input[name="search"]').val('');
+            $('.filter-input').val('');
+            $('.filter-input').trigger('change');
+            sendAjaxRequest();
+        });
+
+        function sendAjaxRequest() {
+            $.ajax({
+                url: formAction,
+                type: 'GET',
+                data: form.serialize(),
+                success: function(res) {
+                    $('table tbody').html(res);
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX request failed.", error);
+                }
+            });
+        }
+    });
+</script>
+@endpush
+

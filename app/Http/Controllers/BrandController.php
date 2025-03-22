@@ -14,7 +14,7 @@ class BrandController extends Controller
     {
         $brands = (new FetchBrand)->execute($request);
         if ($request->ajax()) {
-            return view('components.brands.table', ['entity' => $brands])->render();
+            return view('components.brands.table', ['brands' => $brands])->render();
         }
 
         return view('backend.brands.index', compact('brands'));
@@ -45,6 +45,7 @@ class BrandController extends Controller
 
     public function update(Request $request, Brand $brand)
     {
+        
         $request->validate([
             'name' => 'required|string|max:50|unique:brands,name,' . $brand->id,
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -72,5 +73,17 @@ class BrandController extends Controller
         $brand->delete();
         return redirect()->back()->with('success', 'Brand deleted successfully!');
         // return response()->json(['message' => 'Brand deleted successfully!']);
+    }
+
+
+    public function status_change(Request $request, $id)
+    {
+        try {
+           $brand = Brand::find($id)->update(['status' => $request->status]);
+            
+            return response()->json(['message' => 'Status updated successfully!', 'type' => 'success'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 'type' => 'error'], 500);
+        }
     }
 }

@@ -1,7 +1,7 @@
-@foreach ($suppliers as $supplier)
+@forelse ($entity as $supplier)
     <tr>
         <td>
-            {{ $loop->iteration + $suppliers->firstItem() - 1 }}
+            {{ $loop->iteration + $entity->firstItem() - 1 }}
         </td>
         <td>{{ $supplier->name }}</td>
         <td>{{ $supplier->zone?->name }}</td>
@@ -81,4 +81,8 @@
         </div>
     </div>
     <!-- Edit supplier -->
-@endforeach
+@empty
+    <tr class="text-center">
+        <td colspan="7">No Supplier Found</td>
+    </tr>
+@endforelse

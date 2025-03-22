@@ -15,6 +15,10 @@ class SaleController extends Controller
     {
         $sales = (new FetchSale)->execute($request);
 
+        if ($request->ajax()) {
+            return view('components.sales.table', ['entity' => $sales])->render();
+        }
+
         return view('backend.sales.index', compact('sales'));
     }
     /**

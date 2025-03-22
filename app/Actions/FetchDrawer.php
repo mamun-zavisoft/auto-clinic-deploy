@@ -11,6 +11,7 @@ class FetchDrawer
     {
         $search = $request->input('search', '');
         $perPage = $request->input('per_page', 10);
+        $rack_id = $request->input('rack_id', '');
 
         // Get drawers with rack relationship
         $drawers = Drawer::query()

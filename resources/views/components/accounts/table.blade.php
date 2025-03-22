@@ -1,4 +1,4 @@
-@foreach ($entity as $account)
+@forelse ($accounts as $account)
     <tr>
         <td>
             {{ $loop->iteration + $accounts->firstItem() - 1 }}
@@ -71,4 +71,8 @@
         </div>
     </div>
     <!-- Edit Brand -->
-@endforeach
+@empty
+    <tr class="text-center">
+        <td colspan="7">No Account Found</td>
+    </tr>
+@endforelse

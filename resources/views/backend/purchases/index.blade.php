@@ -7,7 +7,34 @@
 
             <!--  filter -->
             <div class="card table-list-card">
-                    <x-filter />
+                    <x-filter>
+                        <div class="col-lg-4 col-sm-3 col-12 ms-2" style="width: 200px;">
+                            <div class="mb-3 add-product">
+                                <div class="add-newplus">
+                                    <label class="form-label">Supplier</label>
+                                </div>
+                                <select class="select filter-input" name="supplier_id">
+                                    <option value="">Choose</option>
+                                    @foreach ($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}" @selected(request()->supplier_id == $supplier->id)>{{ $supplier->name }}</option>
+                                    @endforeach    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-3 col-12 ms-2" style="width: 200px;">
+                            <div class="mb-3 add-product">
+                                <div class="add-newplus">
+                                    <label class="form-label">Status</label>
+                                </div>
+                                <select class="select filter-input" name="statusType">
+                                    <option value="">Choose</option>
+                                    <option value="pending" @selected(request()->statusType == 'pending')>Pending</option>
+                                    <option value="received" @selected(request()->statusType == 'received')>Received</option>
+                                    <option value="stored" @selected(request()->statusType == 'stored')>Stored</option>
+                                </select>
+                            </div>
+                        </div>
+                    </x-filter>
 
                     <!-- /Filter -->
                     <div class="table-responsive product-list">
@@ -68,7 +95,10 @@
                                             <div class="edit-delete-action">
                                                 <a class="me-2 p-2" href="javascript:void(0);" data-bs-toggle="modal"
                                                 data-bs-target="#purchase-{{ $purchase->id }}">
-                                                    <i data-feather="eye" class="action-eye"></i>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye action-eye">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                </svg>
                                                 </a>
                                                 {{-- <a class="me-2 p-2" data-bs-toggle="modal" data-bs-target="#edit-units">
                                                     <i data-feather="edit" class="feather-edit"></i>
@@ -204,20 +234,24 @@
                                                         <div class="col-md-5">
                                                             <div class="bg-light p-3 rounded">
                                                                 <div class="d-flex justify-content-between">
-                                                                    <span class="font-weight-bold">Total Price</span>
-                                                                    <span class="font-weight-bold">{{ $purchase->grand_total }}</span>
+                                                                    <span class="font-weight-bold">Paid Amount</span>
+                                                                    <span class="font-weight-bold">{{ $purchase->paid_amount }}</span>
                                                                 </div>
                                                                 <div class="d-flex justify-content-between">
+                                                                    <span>Discount</span>
+                                                                    <span>{{ $purchase->discount_amount }}</span>
+                                                                </div>
+                                                                <div class="d-flex justify-content-between">
+                                                                    <span>Due Amount</span>
+                                                                    <span>{{ $purchase->due_amount }}</span>
+                                                                </div>
+                                                                <div class="d-flex justify-content-between mb-2">
                                                                     <span>Shipping Charge</span>
                                                                     <span>{{ $purchase->shipping_charge }}</span>
                                                                 </div>
                                                                 <div class="d-flex justify-content-between mb-2">
-                                                                    <span>Discount</span>
-                                                                    <span>{{ $purchase->discount_amount }}</span>
-                                                                </div>
-                                                                <div class="d-flex justify-content-between mb-2">
                                                                     <span>Grand Total Price</span>
-                                                                    <span>{{ ($purchase->grand_total + $purchase->shipping_charge) - $purchase->discount_amount }}</span>
+                                                                    <span>{{$purchase->grand_total}}</span>
                                                                 </div>
                                                             </div>
                                                         </div>

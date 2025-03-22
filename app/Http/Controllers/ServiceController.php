@@ -25,7 +25,11 @@ class ServiceController extends Controller
         $serviceCharts = ServiceChart::select('id', 'name', 'price', 'code')->get();
         $serviceDetails = ServiceDetail::select('service_id', 'service_chart_id', 'price')->get();
 
-        return view('backend.services.index', compact('services', 'serviceCharts', 'serviceDetails'));
+        if (request()->ajax()) {
+            return view('components.services.table', ['entity' => $services])->render();
+        }
+
+        return view('backend.services.index', compact('services','serviceCharts','serviceDetails'));
     }
     /**
      * Display the service creation form

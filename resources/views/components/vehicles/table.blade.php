@@ -1,7 +1,7 @@
-@foreach ($entity as $vehicle)
+@forelse ($entity as $vehicle)
     <tr>
         <td>
-            {{ $loop->iteration + $vehicles->firstItem() - 1 }}
+            {{ $loop->iteration + $entity->firstItem() - 1 }}
         </td>
         <td>{{ $vehicle->owner_type == 1 ? 'self' : 'external' }}</td>
         <td>{{ $vehicle->license_plate }}</td>
@@ -79,5 +79,9 @@
             </div>
         </div>
     </div>
+@empty
+    <tr class="text-center">
+        <td colspan="7">No Vehicle Found</td>
+    </tr>
+@endforelse
     <!-- Edit Vehicle -->
-@endforeach

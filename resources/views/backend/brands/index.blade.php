@@ -35,8 +35,16 @@
                                         <td><span class="d-flex"><img src="{{ $image ?: asset('build/img/no-image.svg') }}"
                                                     style="width: 50px; height: 50px;" alt=""></span></td>
                                         <td>{{ $brand->created_at->format('d M Y') }}</td>
-                                        <td><span
-                                                class="badge rounded-pill bg-outline-{{ $brand->status == 1 ? 'success' : 'warning' }}">{{ $brand->status == 1 ? 'Active' : 'Inactive' }}</span>
+                                        <td>
+                                            <form class="status-form" action="{{ route('admin.brands.status', $brand->id) }}" method="POST" data-id="{{ $brand->id }}">
+                                                @csrf
+                                                @method('PATCH')
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" class="status-checkbox" {{ $brand->status == '1' ? 'checked' : '' }}>
+                                                    <span class="slider"></span>
+                                                </label>
+                                                <input type="hidden" name="status" value="{{ $brand->status }}">
+                                            </form>
                                         </td>
                                         <td class="action-table-data">
                                             <div class="edit-delete-action">
@@ -262,6 +270,30 @@
                     }
                 });
             });
+
+            $('.status-checkbox').on('change', function(e) {
+                var form = $(this).closest('form');
+                var statusLabel = form.find('.status-label');
+                var currentStatus = form.find('input[name="status"]').val();
+                var newStatus = currentStatus === '1' ? '0' : '1';
+                            
+                form.find('input[name="status"]').val(newStatus);
+                statusLabel.text(newStatus === '1' ? 'Active' : 'Inactive');
+
+                $.ajax({
+                    url: form.attr('action'),
+                    method: form.attr('method'),
+                    data: form.serialize(),
+                }).done(function(response) {
+                    if (response.type == 'success') {
+                        toastr.success(response.message);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                })
+            });
         });
+
+    
     </script>
 @endpush

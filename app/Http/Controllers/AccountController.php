@@ -13,12 +13,10 @@ class AccountController extends Controller
     public function index(Request $request)
     {
         $accounts = (new FetchAccount)->execute($request);
-
         if ($request->ajax()) {
-            return view('components.accounts.table', ['entity' => $accounts])->render();
+            return view('components.accounts.table', ['accounts' => $accounts])->render();
         }
         return view('backend.accounts.index', compact('accounts'));
-
     }
 
 
@@ -32,6 +30,10 @@ class AccountController extends Controller
             ]);
 
             DB::beginTransaction();
+
+            if ($request->balance > 14) {
+                return response()->json(['message' => 'Amount is too high', 'type' => 'error']);
+            }
 
             $account = Account::create([
                 'name' => $request->name,
@@ -75,6 +77,10 @@ class AccountController extends Controller
 
     public function destroy(Account $account)
     {
+        if ($account->paymentDetails->count() > 0) {
+            return redirect()->back()->with('error', 'Account has payment details cannot delete it !');
+        }
+        
         $account->delete();
         return redirect()->back()->with('success', 'Account deleted successfully!');
     }

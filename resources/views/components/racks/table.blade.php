@@ -1,12 +1,16 @@
-@foreach ($entity as $rack)
+@forelse ($racks as $rack)
     <tr>
         <td>
             {{ $loop->iteration + $racks->firstItem() - 1 }}
         </td>
         <td>{{ $rack->name }}</td>
-        <td>{{ $rack->created_at->format('d M Y') }}</td>
+        <td>{{ $rack->total_products_count }}</td>
         <td class="action-table-data">
             <div class="edit-delete-action">
+                <a class="me-2 edit-icon  p-2" href="#" data-bs-toggle="modal"
+                    data-bs-target="#drawers-{{ $rack->id }}">
+                        <i data-feather="eye" class="feather-eye"></i>
+                </a>
                 <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-rack-{{ $rack->id }}">
                     <i data-feather="edit" class="feather-edit"></i>
                 </a>
@@ -22,7 +26,7 @@
         </td>
     </tr>
 
-    <!-- Edit Brand -->
+    <!-- Edit Rack -->
     <div class="modal fade" id="edit-rack-{{ $rack->id }}">
         <div class="modal-dialog modal-dialog-centered custom-modal-two">
             <div class="modal-content">
@@ -58,5 +62,9 @@
             </div>
         </div>
     </div>
-    <!-- Edit Brand -->
-@endforeach
+    <!-- Edit Rack -->
+@empty
+    <tr class="text-center">
+        <td colspan="7">No Brand Found</td>
+    </tr>
+@endforelse
