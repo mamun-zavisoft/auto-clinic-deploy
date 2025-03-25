@@ -10,5 +10,5 @@ interface Mediable
 
     public function addMedia($file, string $collectionName, array $attributes = []): void;
 
-    public function getMedia(string $collectionName = null): array;
+    public function getMedia(?string $collectionName = null): array;
 }

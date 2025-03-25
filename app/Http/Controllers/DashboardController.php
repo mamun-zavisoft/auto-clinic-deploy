@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Vehicle;
-use App\Models\Supplier;
-use App\Models\Service;
 use App\Models\Purchase;
-use App\Models\PurchaseDetail;
-use App\Models\Product;
 use App\Models\Sale;
-use App\Models\ServiceChart;
-use App\Models\ServiceDetail;
+use App\Models\Service;
+use App\Models\Supplier;
+use App\Models\Vehicle;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -61,7 +57,7 @@ class DashboardController extends Controller
         $services = Service::with([
             'vehicle:id,license_plate,owner_type',
             'serviceDetails.serviceChart:id,name,price,code',
-            'sale.saleDetails.product:id,name'
+            'sale.saleDetails.product:id,name',
         ])
             ->orderBy('id', 'desc')
             ->take(5)
@@ -94,8 +90,9 @@ class DashboardController extends Controller
         ]);
     }
 
-    private function getSalePurchaseData($year){
-       
+    private function getSalePurchaseData($year)
+    {
+
         // Get all monthly sales in a single query
         $salesByMonth = Sale::selectRaw('MONTH(created_at) as month, SUM(grand_total) as total')
             ->whereYear('created_at', $year)
@@ -117,8 +114,8 @@ class DashboardController extends Controller
 
             $chartData[] = [
                 'month' => $monthName,
-                'sales' => (float)($salesByMonth[$month] ?? 0),
-                'purchases' => (float)($purchasesByMonth[$month] ?? 0)
+                'sales' => (float) ($salesByMonth[$month] ?? 0),
+                'purchases' => (float) ($purchasesByMonth[$month] ?? 0),
             ];
         }
 

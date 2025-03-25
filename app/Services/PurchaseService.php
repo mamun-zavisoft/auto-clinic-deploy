@@ -7,32 +7,31 @@ use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\PurchaseDetail;
 use Exception;
-use Illuminate\Support\Facades\DB;
 
 class PurchaseService
 {
     public function getAllPurchases(int $perPage)
-    {   
+    {
         $search = request()->input('search', '');
         $supplier_id = request()->input('supplier_id', '');
         $statusType = request()->input('statusType', '');
 
         return Purchase::query()
-        ->with('supplier:id,name', 'zone:id,name')
-        ->where(function ($query) use ($search) {
-            $query->where('reference_no', 'like', "%{$search}%")
-                ->orWhere('transaction_id', 'like', "%{$search}%")
-                ->orWhere('date', 'like', "%{$search}%");
+            ->with('supplier:id,name', 'zone:id,name')
+            ->where(function ($query) use ($search) {
+                $query->where('reference_no', 'like', "%{$search}%")
+                    ->orWhere('transaction_id', 'like', "%{$search}%")
+                    ->orWhere('date', 'like', "%{$search}%");
                 $query->orWhereHas('supplier', function ($query) use ($search) {
                     $query->where('name', 'like', "%{$search}%");
                 });
-        })
-        ->when($supplier_id, function ($query) use ($supplier_id) {
-            $query->where('supplier_id', $supplier_id);
-        })
-        ->when($statusType, function ($query) use ($statusType) {
-            $query->where('status', $statusType);
-        })
+            })
+            ->when($supplier_id, function ($query) use ($supplier_id) {
+                $query->where('supplier_id', $supplier_id);
+            })
+            ->when($statusType, function ($query) use ($statusType) {
+                $query->where('status', $statusType);
+            })
             ->orderBy('id', 'desc')
             ->paginate($perPage);
     }
@@ -87,7 +86,7 @@ class PurchaseService
         $grandTotal = 0;
 
         foreach ($data['product_id'] as $index => $productId) {
-            if (!isset($products[$productId])) {
+            if (! isset($products[$productId])) {
                 throw new Exception("Product with ID $productId not found.");
             }
             $grandTotal += $data['qty'][$index] * $products[$productId];

@@ -6,7 +6,6 @@ use App\Actions\FetchService;
 use App\Models\Account;
 use App\Models\Product;
 use App\Models\Sale;
-use App\Models\SaleDetail;
 use App\Models\Service;
 use App\Models\ServiceChart;
 use App\Models\ServiceDetail;
@@ -14,14 +13,12 @@ use App\Models\Vehicle;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class ServiceController extends Controller
 {
-
     public function index(Request $request)
     {
-        $services = (new FetchService())->execute(request());
+        $services = (new FetchService)->execute(request());
         $serviceCharts = ServiceChart::select('id', 'name', 'price', 'code')->get();
         $serviceDetails = ServiceDetail::select('service_id', 'service_chart_id', 'price')->get();
 
@@ -29,8 +26,9 @@ class ServiceController extends Controller
             return view('components.services.table', ['entity' => $services])->render();
         }
 
-        return view('backend.services.index', compact('services','serviceCharts','serviceDetails'));
+        return view('backend.services.index', compact('services', 'serviceCharts', 'serviceDetails'));
     }
+
     /**
      * Display the service creation form
      */
@@ -133,7 +131,7 @@ class ServiceController extends Controller
             }
 
             // Process parts if any
-            if ($request->any_parts_purchase && !empty($request->parts)) {
+            if ($request->any_parts_purchase && ! empty($request->parts)) {
 
                 $sale = Sale::create([
                     'transaction_id' => PurchaseController::transactionIdGenerate(),
@@ -156,7 +154,7 @@ class ServiceController extends Controller
                         $part['quantity']
                     );
 
-                    if (!$isAvailable['is_available']) {
+                    if (! $isAvailable['is_available']) {
                         throw new \Exception("Product ID {$part['product_id']} is not available in the requested quantity in Drawer {$part['drawer_id']}");
                     }
 
@@ -193,16 +191,18 @@ class ServiceController extends Controller
             }
 
             DB::commit();
+
             return response()->json([
                 'type' => 'success',
                 'message' => 'Service created successfully',
-                'redirectUrl' => route('admin.services.index')
+                'redirectUrl' => route('admin.services.index'),
             ], 201);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return response()->json([
                 'type' => 'error',
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 422);
         }
     }
@@ -233,9 +233,10 @@ class ServiceController extends Controller
 
         return [
             'is_available' => $availableQty >= $requestedQty,
-            'available_qty' => $availableQty
+            'available_qty' => $availableQty,
         ];
     }
+
     /**
      * Calculate the paid status based on grand total and paid amount
      */
@@ -254,6 +255,7 @@ class ServiceController extends Controller
     {
         $service = Service::find($id);
         $accounts = Account::select('id', 'name', 'balance')->get();
+
         return view('backend.services.view_payments', compact('service', 'accounts'));
     }
 
@@ -279,12 +281,12 @@ class ServiceController extends Controller
 
             // For partial_paid or full_paid
             $account = Account::find($request->account_id);
-            if (!$account) {
+            if (! $account) {
                 return response()->json(['message' => 'Account not found', 'type' => 'error'], 422);
             }
 
             if ($request->payment_type == 'partial_paid' && $request->amount > $service->due_amount) {
-                return response()->json(['message' => 'Payment amount cannot be greater than due amount ' . $service->due_amount, 'type' => 'error'], 422);
+                return response()->json(['message' => 'Payment amount cannot be greater than due amount '.$service->due_amount, 'type' => 'error'], 422);
             }
 
             DB::beginTransaction();
@@ -330,10 +332,11 @@ class ServiceController extends Controller
             return response()->json([
                 'message' => 'Payment created successfully.',
                 'type' => 'success',
-                'redirectUrl' =>  route('admin.services.index'),
+                'redirectUrl' => route('admin.services.index'),
             ]);
         } catch (Exception $e) {
             DB::rollBack();
+
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
@@ -341,7 +344,8 @@ class ServiceController extends Controller
     public function printInvoice(Request $request)
     {
         try {
-            $service = Service::with('vehicle:id,license_plate','account:id,type','sale')->findOrFail($request->id);
+            $service = Service::with('vehicle:id,license_plate', 'account:id,type', 'sale')->findOrFail($request->id);
+
             return view('backend.services._service_invoice_print', compact('service'));
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 404);

@@ -193,7 +193,7 @@
     <!-- Invoice Header -->
     <div class="invoice-header">
         <div class="logo-section">
-            <h2>FastAuto Clinic</h2>
+            <img src="{{ asset('build/img/logo.png') }}" class="img-fluid p-2" style="width: 180px; height: 80px" alt="">
             <p>Vehicle Service Management</p>
         </div>
         <div class="company-details">

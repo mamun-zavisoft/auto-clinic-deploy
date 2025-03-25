@@ -31,7 +31,7 @@ class LoginRequest extends FormRequest
                 'required',
                 'string',
                 function ($attribute, $value, $fail) {
-                    if (!filter_var($value, FILTER_VALIDATE_EMAIL) && !preg_match('/^01[3-9]\d{8}$/', $value)) {
+                    if (! filter_var($value, FILTER_VALIDATE_EMAIL) && ! preg_match('/^01[3-9]\d{8}$/', $value)) {
                         $fail('The identifier must be a valid email or Bangladeshi phone number.');
                     }
                 },
@@ -63,7 +63,7 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        if (!Auth::attempt($credentials, $this->boolean('remember'))) {
+        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -81,7 +81,7 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -102,6 +102,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('identifier')) . '|' . $this->ip());
+        return Str::transliterate(Str::lower($this->string('identifier')).'|'.$this->ip());
     }
 }

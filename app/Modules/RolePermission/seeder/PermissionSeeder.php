@@ -21,21 +21,21 @@ class PermissionSeeder extends Seeder
 
         $permissions = [
             ['guard_name' => 'admin', 'group_name' => 'dashboard', 'name' => 'cards'],
-            ['guard_name' => 'admin', 'group_name' => 'dashboard', 'name' => 'chart'], 
+            ['guard_name' => 'admin', 'group_name' => 'dashboard', 'name' => 'chart'],
 
             ['guard_name' => 'admin', 'group_name' => 'order-payment', 'name' => 'order-payment-list'],
-            ['guard_name' => 'admin', 'group_name' => 'order-payment', 'name' => 'order-payment-show'], 
-            ['guard_name' => 'admin', 'group_name' => 'order-payment', 'name' => 'order-payment-update'], 
+            ['guard_name' => 'admin', 'group_name' => 'order-payment', 'name' => 'order-payment-show'],
+            ['guard_name' => 'admin', 'group_name' => 'order-payment', 'name' => 'order-payment-update'],
 
             ['guard_name' => 'admin', 'group_name' => 'order', 'name' => 'order-list'],
-            ['guard_name' => 'admin', 'group_name' => 'order', 'name' => 'order-show'], 
+            ['guard_name' => 'admin', 'group_name' => 'order', 'name' => 'order-show'],
 
             ['guard_name' => 'admin', 'group_name' => 'shop-product', 'name' => 'shop-product-list'],
             ['guard_name' => 'admin', 'group_name' => 'shop-product', 'name' => 'shop-product-show'],
 
             ['guard_name' => 'admin', 'group_name' => 'product-request', 'name' => 'product-request-list'],
-            ['guard_name' => 'admin', 'group_name' => 'product-request', 'name' => 'product-request-update'], 
-            ['guard_name' => 'admin', 'group_name' => 'product-request', 'name' => 'product-request-show'], 
+            ['guard_name' => 'admin', 'group_name' => 'product-request', 'name' => 'product-request-update'],
+            ['guard_name' => 'admin', 'group_name' => 'product-request', 'name' => 'product-request-show'],
 
             ['guard_name' => 'admin', 'group_name' => 'merchant', 'name' => 'merchant-list'],
             ['guard_name' => 'admin', 'group_name' => 'merchant', 'name' => 'merchant-show'],
@@ -100,12 +100,12 @@ class PermissionSeeder extends Seeder
             ['guard_name' => 'admin', 'group_name' => 'role', 'name' => 'role-create'],
             ['guard_name' => 'admin', 'group_name' => 'role', 'name' => 'role-update'],
             ['guard_name' => 'admin', 'group_name' => 'role', 'name' => 'role-delete'],
-            
+
             ['guard_name' => 'admin', 'group_name' => 'user', 'name' => 'user-list'],
             ['guard_name' => 'admin', 'group_name' => 'user', 'name' => 'user-create'],
             ['guard_name' => 'admin', 'group_name' => 'user', 'name' => 'user-update'],
             ['guard_name' => 'admin', 'group_name' => 'user', 'name' => 'user-delete'],
-            
+
         ];
 
         $newPermissions = [];

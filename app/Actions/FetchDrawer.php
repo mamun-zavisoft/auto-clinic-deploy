@@ -60,7 +60,7 @@ class FetchDrawer
                 $query->whereNull('sh.id')
                     ->orWhereNull('sh.sale_id');
             })
-            ->groupBy('sp.drawer_id', 'products.id', 'products.name', )
+            ->groupBy('sp.drawer_id', 'products.id', 'products.name')
             ->get()
             ->groupBy('drawer_id');
 
@@ -73,11 +73,12 @@ class FetchDrawer
             $products = collect($productsByDrawer[$drawer->id] ?? [])
                 ->map(function ($item) {
                     // Create a standard object that mimics a Product model with available_quantity
-                    $product = new \stdClass();
+                    $product = new \stdClass;
                     $product->id = $item->product_id;
                     $product->name = $item->product_name;
                     // $product->thumbnail = $item->thumbnail;
                     $product->available_quantity = $item->available_quantity;
+
                     return $product;
                 });
 

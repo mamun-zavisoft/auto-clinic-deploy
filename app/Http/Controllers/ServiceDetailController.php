@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Actions\FetchServiceDetail;
 use App\Models\Service;
 use App\Models\ServiceChart;
-use App\Models\ServiceDetail;
-use App\Actions\FetchServiceDetail;
-use App\Models\Vehicle;
+use Illuminate\Http\Request;
 
 class ServiceDetailController extends Controller
 {
@@ -15,15 +13,13 @@ class ServiceDetailController extends Controller
     {
         $serviceDetails = (new FetchServiceDetail)->execute($request);
 
-        $service = Service::with('vehicle')->select('id','service_type','discount','grand_total','total_amount','any_parts_purchase')->get();
-        $serviceChart = ServiceChart::select('id','name','price','code')->get();
+        $service = Service::with('vehicle')->select('id', 'service_type', 'discount', 'grand_total', 'total_amount', 'any_parts_purchase')->get();
+        $serviceChart = ServiceChart::select('id', 'name', 'price', 'code')->get();
 
-        if ($request->ajax())
-        {
-            return view('components.serviceDetails.table', ['entity'=>$serviceDetails])->render();
+        if ($request->ajax()) {
+            return view('components.serviceDetails.table', ['entity' => $serviceDetails])->render();
         }
 
-        return view('backend.serviceDetails.index', compact('serviceDetails','service','serviceChart'));
+        return view('backend.serviceDetails.index', compact('serviceDetails', 'service', 'serviceChart'));
     }
-    
 }

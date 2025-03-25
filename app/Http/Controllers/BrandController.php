@@ -6,7 +6,6 @@ use App\Actions\FetchBrand;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Stmt\TryCatch;
 
 class BrandController extends Controller
 {
@@ -39,15 +38,16 @@ class BrandController extends Controller
             return response()->json(['message' => 'Brand created successfully!', 'type' => 'success'], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return response()->json(['message' => $th->getMessage() . '1', 'type' => 'error']);
+
+            return response()->json(['message' => $th->getMessage().'1', 'type' => 'error']);
         }
     }
 
     public function update(Request $request, Brand $brand)
     {
-        
+
         $request->validate([
-            'name' => 'required|string|max:50|unique:brands,name,' . $brand->id,
+            'name' => 'required|string|max:50|unique:brands,name,'.$brand->id,
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -55,7 +55,7 @@ class BrandController extends Controller
             $brand->update([
                 'name' => $request->name,
             ]);
-            
+
             $brand->image = $request->file('image');
             $brand->save();
 
@@ -71,16 +71,16 @@ class BrandController extends Controller
         //     return response()->json(['message' => 'Brand has products, cannot delete!'], 422);
         // }
         $brand->delete();
+
         return redirect()->back()->with('success', 'Brand deleted successfully!');
         // return response()->json(['message' => 'Brand deleted successfully!']);
     }
 
-
     public function status_change(Request $request, $id)
     {
         try {
-           $brand = Brand::find($id)->update(['status' => $request->status]);
-            
+            $brand = Brand::find($id)->update(['status' => $request->status]);
+
             return response()->json(['message' => 'Status updated successfully!', 'type' => 'success'], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage(), 'type' => 'error'], 500);

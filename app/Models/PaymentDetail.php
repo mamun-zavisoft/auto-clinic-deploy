@@ -13,7 +13,8 @@ class PaymentDetail extends Model
         return $this->belongsTo(Payment::class);
     }
 
-    public function account(){
+    public function account()
+    {
         return $this->belongsTo(Account::class);
     }
 }

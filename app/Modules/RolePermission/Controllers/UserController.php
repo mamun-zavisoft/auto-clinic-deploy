@@ -5,12 +5,10 @@ namespace App\Modules\RolePermission\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Zone;
-use App\Modules\RolePermission\Requests\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Contracts\Role as ContractsRole;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -29,15 +27,14 @@ class UserController extends Controller
         $users = User::query()
             ->with('roles')
             ->when($search, function ($query, $search) {
-                return $query->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%')
-                    ->orWhere('phone', 'like', '%' . $search . '%');
+                return $query->where('name', 'like', '%'.$search.'%')
+                    ->orWhere('email', 'like', '%'.$search.'%')
+                    ->orWhere('phone', 'like', '%'.$search.'%');
             })
             ->orderBy('id', 'desc')
             ->paginate($perPage);
 
         $roles = Role::select('id', 'name')->get();
-
 
         if (request()->ajax()) {
             return view('components.users.table', ['users' => $users])->render();
@@ -109,8 +106,8 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'nullable|email|unique:users,email,' . $id,
-            'phone' => 'required|unique:users,phone,' . $id,
+            'email' => 'nullable|email|unique:users,email,'.$id,
+            'phone' => 'required|unique:users,phone,'.$id,
             'role_id' => 'required',
         ]);
 
@@ -132,7 +129,7 @@ class UserController extends Controller
         } else {
             $user->permissions()->detach();
         }
-        Cache::forget('user_permissions' . $user->id);
+        Cache::forget('user_permissions'.$user->id);
 
         $user->save();
 
