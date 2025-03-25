@@ -6,13 +6,11 @@ use App\Actions\FetchProduct;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('permission:product-list')->only('index');
@@ -24,14 +22,14 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $products = (new FetchProduct)->execute($request);
-        $categories = Category::select('id','name')->get();
-        $brands = Brand::select('id','name')->get();
-        
+        $categories = Category::select('id', 'name')->get();
+        $brands = Brand::select('id', 'name')->get();
+
         if ($request->ajax()) {
             return view('components.products.table', ['products' => $products])->render();
         }
 
-        return view('backend.products.index', compact('products','categories','brands'));
+        return view('backend.products.index', compact('products', 'categories', 'brands'));
     }
 
     public function create()
@@ -100,7 +98,7 @@ class ProductController extends Controller
         $request->validate([
             'category_id' => 'nullable|integer|exists:categories,id',
             'brand_id' => 'nullable|integer|exists:brands,id',
-            'name' => 'required|string|max:255|unique:products,name,' . $product->id,
+            'name' => 'required|string|max:255|unique:products,name,'.$product->id,
             'description' => 'nullable|string|max:4000',
             'purchase_price' => 'required|numeric|min:0',
             'sale_price' => 'required|numeric|min:0',
@@ -154,7 +152,6 @@ class ProductController extends Controller
     {
         $search = $request->search ?? '';
         $query = Product::query();
-
 
         if ($search !== '') {
             $query->where('name', 'LIKE', '%'.$search.'%');

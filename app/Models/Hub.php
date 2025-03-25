@@ -8,8 +8,8 @@ class Hub extends Model
 {
     protected $guarded = [];
 
-
-    public function zone(){
+    public function zone()
+    {
         return $this->belongsTo(Zone::class);
     }
 }

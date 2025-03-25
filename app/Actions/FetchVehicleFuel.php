@@ -14,8 +14,8 @@ class FetchVehicleFuel
         return VehicleFuel::with('vehicle')
             ->when($search, function ($query, $search) {
                 $query->WhereHas('vehicle', function ($query) use ($search) {
-                          $query->where('license_plate', 'like', "%{$search}%");
-                      });
+                    $query->where('license_plate', 'like', "%{$search}%");
+                });
             })
             ->orderBy('id', 'desc')
             ->paginate($perPage)

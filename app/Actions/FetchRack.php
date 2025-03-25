@@ -6,7 +6,6 @@ use App\Models\Rack;
 
 class FetchRack
 {
-    
     public function execute($request)
     {
 
@@ -15,11 +14,10 @@ class FetchRack
 
         return Rack::query()
             ->with('zone:id,name')
-            ->when($search, function($query, $search) {
+            ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
-            ->select('id','name','zone_id','created_at')
+            ->select('id', 'name', 'zone_id', 'created_at')
             ->orderBy('id', 'desc')->paginate($perPage)->withQueryString();
     }
-    
 }

@@ -19,6 +19,7 @@ class VehicleFuelController extends Controller
         if ($request->ajax()) {
             return view('components.vehicleFuels.table', ['entity' => $vehicleFuels])->render();
         }
+
         return view('backend.vehicle_fuels.index', compact('vehicleFuels'));
     }
 
@@ -29,6 +30,7 @@ class VehicleFuelController extends Controller
     {
         $vehicles = Vehicle::select('id', 'license_plate')->get();
         $recentFuelings = VehicleFuel::with('vehicle')->latest()->take(5)->get();
+
         return view('backend.vehicle_fuels.create', get_defined_vars());
     }
 
@@ -46,7 +48,7 @@ class VehicleFuelController extends Controller
             'total_price' => 'required|numeric',
         ]);
 
-        $vehicleFuel =VehicleFuel::create([
+        $vehicleFuel = VehicleFuel::create([
             'vehicle_id' => $request->vehicle_id,
             'fuel_type' => $request->fuel_type,
             'current_odometer' => $request->current_odometer,
@@ -67,6 +69,7 @@ class VehicleFuelController extends Controller
     public function edit(VehicleFuel $vehicleFuel)
     {
         $vehicles = Vehicle::select('id', 'license_plate')->get();
+
         return view('backend.vehicle_fuels.edit', compact('vehicleFuel', 'vehicles'));
     }
 
@@ -102,6 +105,7 @@ class VehicleFuelController extends Controller
     public function destroy(VehicleFuel $vehicleFuel)
     {
         $vehicleFuel->delete();
+
         return redirect()->route('admin.vehicle-fuels.index')->with('success', 'Fuel entry deleted successfully.');
     }
 }

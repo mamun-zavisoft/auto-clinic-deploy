@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Media\HasMedia;
 use App\Media\Mediable;
-
 use Illuminate\Database\Eloquent\Model;
 
 class Brand extends Model implements Mediable

@@ -3,17 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Actions\FetchVehicle;
-use Illuminate\Http\Request;
-use App\Models\Vehicle;
-use App\Models\Zone;
-use App\Models\Service;
-use App\Models\VehicleModel;
 use App\Models\Hub;
+use App\Models\Service;
+use App\Models\Vehicle;
+use App\Models\VehicleModel;
+use App\Models\Zone;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class VehiclesController extends Controller
 {
-    
     public function index(Request $request)
     {
         $vehicles = (new FetchVehicle)->execute($request);
@@ -21,16 +20,16 @@ class VehiclesController extends Controller
         $vehicleModels = VehicleModel::select('id', 'name')->get();
         $hubs = Hub::select('id', 'name')->get();
 
-        if ($request->ajax()){
+        if ($request->ajax()) {
             return view('components.vehicles.table', ['vehicles' => $vehicles, 'zones' => $zones, 'vehicleModels' => $vehicleModels, 'hubs' => $hubs])->render();
         }
+
         return view('backend.vehicles.index', compact('vehicles', 'zones', 'vehicleModels', 'hubs'));
     }
 
-
     public function store(Request $request)
     {
-        try{
+        try {
 
             $data = $request->validate([
                 'owner_type' => 'required|in:1,2',
@@ -45,7 +44,7 @@ class VehiclesController extends Controller
                 'insurance_validity' => 'required|date',
                 'license_plate' => 'required|string|max:50|unique:vehicles,license_plate',
                 'current_odometer' => 'required|numeric|min:0',
-                'status' => 'required|in:1,2'
+                'status' => 'required|in:1,2',
             ]);
 
             $data['registration_date'] = date('Y-m-d', strtotime($request->registration_date));
@@ -71,31 +70,33 @@ class VehiclesController extends Controller
                 'license_plate' => $request->license_plate,
                 'current_odometer' => $request->current_odometer,
                 'zone_id' => auth()->user()?->zone_id,
-                'status' => $request->status
+                'status' => $request->status,
             ]);
 
             DB::commit();
-            return response()->json(['message' => 'Vehicle created successfully!', 'type' => 'success', 'data' => $vehicle ],200);
-        }catch (\Throwable $th) {
+
+            return response()->json(['message' => 'Vehicle created successfully!', 'type' => 'success', 'data' => $vehicle], 200);
+        } catch (\Throwable $th) {
             DB::rollBack();
+
             return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
         }
     }
 
-
-    public function show(Vehicle $vehicle){
+    public function show(Vehicle $vehicle)
+    {
 
         $services = Service::where('vehicle_id', $vehicle->id)->get();
-        return view('backend.vehicles.show',compact('vehicle','services',));
-    }
 
+        return view('backend.vehicles.show', compact('vehicle', 'services'));
+    }
 
     public function update(Request $request, Vehicle $vehicle)
     {
-        try{
+        try {
             $request->validate([
                 'owner_type' => 'required|in:1,2',
-                'vehicle_type' => 'required|in:1,2,3,4,5,' . $vehicle->id,
+                'vehicle_type' => 'required|in:1,2,3,4,5,'.$vehicle->id,
                 'hub_id' => 'required|exists:hubs,id',
                 'vehicle_model_id' => 'required|exists:vehicle_models,id',
                 'registration_date' => 'required|date_format:Y-m-d',
@@ -104,11 +105,10 @@ class VehiclesController extends Controller
                 'fitness_validity' => 'required|date_format:Y-m-d',
                 'road_permit_validity' => 'required|date_format:Y-m-d',
                 'insurance_validity' => 'required|date_format:Y-m-d',
-                'license_plate' => 'required|string|max:50|unique:vehicles,license_plate,' . $vehicle->id,
+                'license_plate' => 'required|string|max:50|unique:vehicles,license_plate,'.$vehicle->id,
                 'current_odometer' => 'required|numeric|min:0',
-                'status' => 'required|in:1,2'
+                'status' => 'required|in:1,2',
             ]);
-
 
             $vehicle->update([
                 'owner_type' => $request->owner_type,
@@ -124,19 +124,19 @@ class VehiclesController extends Controller
                 'license_plate' => $request->license_plate,
                 'current_odometer' => $request->current_odometer,
                 'zone_id' => auth()->user()?->zone_id,
-                'status' => $request->status
+                'status' => $request->status,
             ]);
 
-            return response()->json(['message' => 'Vehicle updated successfully!', 'type' => 'success'],200);
-        }catch (\Throwable $th) {
+            return response()->json(['message' => 'Vehicle updated successfully!', 'type' => 'success'], 200);
+        } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
         }
     }
 
-
     public function destroy(Vehicle $vehicle)
     {
         $vehicle->delete();
+
         return redirect()->back()->with('success', 'Vehicle deleted successfully!');
     }
 
@@ -144,19 +144,17 @@ class VehiclesController extends Controller
     {
         $request->validate([
             'search' => 'required|string|max:40',
-            'service_type' => 'required|in:self,external'
+            'service_type' => 'required|in:self,external',
         ]);
 
-        $vehicles = Vehicle::where('owner_type', $request->service_type =='self' ? '1' : '2')
-                            ->where('license_plate', 'LIKE', "%{$request->search}%")
-                            ->get();
+        $vehicles = Vehicle::where('owner_type', $request->service_type == 'self' ? '1' : '2')
+            ->where('license_plate', 'LIKE', "%{$request->search}%")
+            ->get();
 
         if ($vehicles->count() > 0) {
-            return response()->json(['message' => 'Vehicles found!', 'type' => 'success', 'data' => $vehicles],200);
+            return response()->json(['message' => 'Vehicles found!', 'type' => 'success', 'data' => $vehicles], 200);
         } else {
-            return response()->json(['message' => 'Vehicle not found!', 'type' => 'error'],200);
+            return response()->json(['message' => 'Vehicle not found!', 'type' => 'error'], 200);
         }
     }
-
-
 }

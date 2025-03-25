@@ -21,6 +21,7 @@ class SaleController extends Controller
 
         return view('backend.sales.index', compact('sales'));
     }
+
     /**
      * Display the sales creation form
      */
@@ -28,6 +29,7 @@ class SaleController extends Controller
     {
         $accounts = Account::select('id', 'name', 'balance')->get();
         $products = Product::select('id', 'name', 'purchase_price', 'sale_price', 'total_available_qty')->get();
+
         return view('backend.sales.create', get_defined_vars());
     }
 
@@ -62,7 +64,7 @@ class SaleController extends Controller
                 'paid_status' => 'full_paid',
                 'account_id' => $request->account_id,
                 'note' => $request->note,
-                'phone' => $request->phone
+                'phone' => $request->phone,
             ]);
 
             // Process parts sale
@@ -75,7 +77,7 @@ class SaleController extends Controller
                     $part['quantity']
                 );
 
-                if (!$isAvailable['is_available']) {
+                if (! $isAvailable['is_available']) {
                     throw new \Exception("Product ID {$part['product_id']} is not available in the requested quantity");
                 }
 
@@ -140,13 +142,14 @@ class SaleController extends Controller
             return response()->json([
                 'type' => 'success',
                 'message' => 'sale completed successfully',
-                'redirectUrl' => route('admin.sales.index')
+                'redirectUrl' => route('admin.sales.index'),
             ], 201);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return response()->json([
                 'type' => 'error',
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 422);
         }
     }
@@ -175,7 +178,7 @@ class SaleController extends Controller
 
         return [
             'is_available' => $availableQty >= $requestedQty,
-            'available_qty' => $availableQty
+            'available_qty' => $availableQty,
         ];
     }
 }

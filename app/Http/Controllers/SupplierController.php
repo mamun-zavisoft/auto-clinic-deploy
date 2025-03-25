@@ -11,8 +11,8 @@ class SupplierController extends Controller
 {
     public function index(Request $request)
     {
-       $suppliers = (new FetchSupplier)->execute($request);
-       $zones = Zone::select('id', 'name')->get();
+        $suppliers = (new FetchSupplier)->execute($request);
+        $zones = Zone::select('id', 'name')->get();
         if ($request->ajax()) {
             return view('components.suppliers.table', ['suppliers' => $suppliers, 'zones' => $zones])->render();
         }
@@ -28,20 +28,20 @@ class SupplierController extends Controller
             'phone' => 'required|regex:/^01[3-9]\d{8}$/|unique:suppliers,phone',
             'balance' => 'nullable|numeric|min:0',
         ],
-        [
-            'zone_id.required' => 'The zone field is required.'
-        ]);
+            [
+                'zone_id.required' => 'The zone field is required.',
+            ]);
         try {
             $supplier = Supplier::create([
                 'name' => $request->name,
                 'zone_id' => $request->zone_id,
                 'phone' => $request->phone,
-                'balance' => $request->balance ?? 0
+                'balance' => $request->balance ?? 0,
             ]);
-    
-            return response()->json(['message' => 'Supplier created successfully!', 'type' => 'success' ], 200);
+
+            return response()->json(['message' => 'Supplier created successfully!', 'type' => 'success'], 200);
         } catch (\Throwable $th) {
-            return response()->json(['message' => $th->getMessage(), 'type' => 'error' ]);
+            return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
         }
     }
 
@@ -50,7 +50,7 @@ class SupplierController extends Controller
         $request->validate([
             'name' => 'required|string|max:50',
             'zone_id' => 'required|exists:zones,id',
-            'phone' => 'required|regex:/^01[3-9]\d{8}$/|unique:suppliers,phone,' . $supplier->id,
+            'phone' => 'required|regex:/^01[3-9]\d{8}$/|unique:suppliers,phone,'.$supplier->id,
         ]);
 
         try {
@@ -60,9 +60,9 @@ class SupplierController extends Controller
                 'phone' => $request->phone,
             ]);
 
-            return response()->json(['message' => 'Supplier updated successfully!', 'type' => 'success' ]);
+            return response()->json(['message' => 'Supplier updated successfully!', 'type' => 'success']);
         } catch (\Throwable $th) {
-            return response()->json(['message' => $th->getMessage(), 'type' => 'error' ]);
+            return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
         }
 
     }
@@ -73,6 +73,7 @@ class SupplierController extends Controller
         //     return response()->json(['message' => 'Category has products, cannot delete!'], 422);
         // }
         $supplier->delete();
+
         return redirect()->back()->with('success', 'Supplier deleted successfully!');
     }
 }

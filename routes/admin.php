@@ -7,24 +7,18 @@ use App\Http\Controllers\DrawerController;
 use App\Http\Controllers\HubController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
-use App\Http\Controllers\PurchasesDetailController;
 use App\Http\Controllers\RackController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ServiceChartController;
 use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\ServiceDetailController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockPurchaseController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\VehicleFuelController;
+use App\Http\Controllers\VehicleModelController;
 use App\Http\Controllers\VehiclesController;
 use App\Http\Controllers\ZoneController;
-use App\Http\Controllers\VehicleModelController;
-use App\Models\Drawer;
-use App\Models\Purchase;
 use Illuminate\Support\Facades\Route;
-use PHPUnit\Architecture\Services\ServiceContainer;
 
 Route::middleware('auth')->name('admin.')->group(function () {
     Route::resource('/brands', BrandController::class);
@@ -43,7 +37,7 @@ Route::middleware('auth')->name('admin.')->group(function () {
     Route::resource('/vehicle-fuels', VehicleFuelController::class);
     Route::resource('/hubs', HubController::class);
     Route::resource('/vehicle-models', VehicleModelController::class);
-     
+
     // single action routes
     Route::get('/product/search', [ProductController::class, 'search'])->name('products.search');
     Route::put('/purchases/statusChange/{id}', [PurchaseController::class, 'statusChange'])->name('purchases.statusChange');
@@ -52,14 +46,12 @@ Route::middleware('auth')->name('admin.')->group(function () {
     Route::get('/service/{id}/details', [ServiceController::class, 'printInvoice'])->name('service.print');
     Route::patch('/brands/{id}/status', [BrandController::class, 'updateStatus'])->name('brands.status');
 
-
     // ajax call routes
     Route::get('/drawers/fetch/{rackId}', [DrawerController::class, 'fetchDrawersByRack'])->name('racks.fetchDrawers');
     Route::get('/purchase/view/payments/{id}', [PurchaseController::class, 'view_payments'])->name('purchase.view.payments');
     Route::get('/service/view/payments/{id}', [ServiceController::class, 'view_payments'])->name('service.view.payments');
     Route::get('/search/vehicle', [VehiclesController::class, 'searchVehicle'])->name('search.vehicle');
 
-    
     // system general settings
     Route::controller(SettingController::class)->group(function () {
         Route::delete('/media/{modelName}/{id}', 'destroyMedia')->name('media.destroy');

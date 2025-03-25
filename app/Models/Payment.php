@@ -8,11 +8,13 @@ class Payment extends Model
 {
     protected $guarded = [];
 
-    public function purchase(){
+    public function purchase()
+    {
         return $this->belongsTo(Purchase::class, 'purchase_id', 'id');
     }
 
-    public function sale(){
+    public function sale()
+    {
         return $this->belongsTo(Sale::class, 'sale_id', 'id');
     }
 

@@ -10,7 +10,7 @@ class Media extends Model
 {
     use HasFactory;
 
-    public static $disk_name = "public";
+    public static $disk_name = 'public';
 
     protected $appends = ['full_url'];
 

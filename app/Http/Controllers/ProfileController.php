@@ -6,8 +6,8 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -16,7 +16,7 @@ class ProfileController extends Controller
      * Display the user's profile form.
      */
     public function edit(Request $request): View
-    {   
+    {
         return view('profile.edit', [
             'user' => $request->user(),
         ]);
@@ -32,7 +32,7 @@ class ProfileController extends Controller
         $user->fill($request->validated());
 
         if ($request->filled('new_password')) {
-            if (!Hash::check($request->old_password, $user->password)) {
+            if (! Hash::check($request->old_password, $user->password)) {
                 return back()->with('error', 'Old Password is incorrect');
             }
             $user->password = Hash::make($request->new_password);

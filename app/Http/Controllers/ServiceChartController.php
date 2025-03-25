@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\ServiceChart;
 use App\Actions\FetchServiceChart;
+use App\Models\ServiceChart;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ServiceChartController extends Controller
 {
-   
     public function index(Request $request)
     {
         $serviceCharts = (new FetchServiceChart)->execute($request);
@@ -24,27 +23,27 @@ class ServiceChartController extends Controller
 
     public function store(Request $request)
     {
-        try{
+        try {
             $request->validate([
                 'name' => 'required|string|max:50|unique:service_charts,name',
                 'price' => 'required|numeric|min:1',
                 'description' => 'nullable|string|max:4000',
-                'code' => 'required|string|max:50|unique:service_charts,code'
+                'code' => 'required|string|max:50|unique:service_charts,code',
             ]);
 
             DB::beginTransaction();
 
             $serviceChart = ServiceChart::create([
-                'name' =>$request->name,
+                'name' => $request->name,
                 'price' => $request->price,
                 'description' => $request->description,
-                'code' => $request->code
+                'code' => $request->code,
             ]);
 
             DB::commit();
 
-            return response()->json(['message' => 'Service charts created successfully!', 'type' => 'success'],200);
-        }catch (\Throwable $th) {
+            return response()->json(['message' => 'Service charts created successfully!', 'type' => 'success'], 200);
+        } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
         }
 
@@ -52,12 +51,12 @@ class ServiceChartController extends Controller
 
     public function update(Request $request, ServiceChart $serviceChart)
     {
-        try{
+        try {
             $request->validate([
-                'name' => 'required|string|max:50|unique:service_charts,name,' . $serviceChart->id,
-                'price' => 'required|numeric|min:1,' . $serviceChart->id,
-                'description' => 'nullable|string|max:4000,' . $serviceChart->id,
-                'code' => 'required|string|max:50|unique:service_charts,code,' . $serviceChart->id
+                'name' => 'required|string|max:50|unique:service_charts,name,'.$serviceChart->id,
+                'price' => 'required|numeric|min:1,'.$serviceChart->id,
+                'description' => 'nullable|string|max:4000,'.$serviceChart->id,
+                'code' => 'required|string|max:50|unique:service_charts,code,'.$serviceChart->id,
             ]);
 
             if ($request->price > 14) {
@@ -65,24 +64,23 @@ class ServiceChartController extends Controller
             }
 
             $serviceChart->update([
-                'name' =>$request->name,
+                'name' => $request->name,
                 'price' => $request->price,
                 'description' => $request->description,
-                'code' => $request->code
+                'code' => $request->code,
             ]);
 
-            return response()->json(['message' => 'Service chart updated successfully!', 'type' => 'success'],200);
-        }catch (\Throwable $th) {
+            return response()->json(['message' => 'Service chart updated successfully!', 'type' => 'success'], 200);
+        } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
         }
 
     }
 
-
     public function destroy(ServiceChart $serviceChart)
     {
         $serviceChart->delete();
+
         return redirect()->back()->with('success', 'Service chart deleted successfully!');
     }
-
 }

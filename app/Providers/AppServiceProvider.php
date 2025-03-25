@@ -2,12 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\User;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,7 +25,6 @@ class AppServiceProvider extends ServiceProvider
     {
         View::addNamespace('RolePermission', base_path('app/Modules/RolePermission/Views'));
 
-
         View::composer('*', function () {
 
             Blade::if('permission', function ($permissions) {
@@ -37,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
                         }
                     }
                 }
+
                 return Auth::check() && Auth::user()->hasPermission($permissions);
             });
 

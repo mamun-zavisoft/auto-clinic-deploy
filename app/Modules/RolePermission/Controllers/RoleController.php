@@ -3,7 +3,6 @@
 namespace App\Modules\RolePermission\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\Permission;
@@ -66,7 +65,7 @@ class RoleController extends Controller
     {
         $role = Role::with('users')->where('id', $role->id)->first();
         $data = $request->validate([
-            'name' => 'required|unique:roles,name,' . $role->id,
+            'name' => 'required|unique:roles,name,'.$role->id,
             'guard_name' => 'required|in:web,admin',
             'permissions' => 'required|array',
             'permissions.*' => 'required|exists:permissions,name',
@@ -81,7 +80,7 @@ class RoleController extends Controller
         $users = $role->users;
 
         foreach ($users as $user) {
-            Cache::forget('user_permissions' . $user->id);
+            Cache::forget('user_permissions'.$user->id);
         }
 
         return redirect()->route('roles.index')->with('success', 'Role updated successfully.');
@@ -93,9 +92,9 @@ class RoleController extends Controller
         $role->load('users');
         if ($role->users->count() > 0) {
             return redirect()->route('roles.index')
-            ->with('error', 'Cannot delete this role because users are assigned to it.');
+                ->with('error', 'Cannot delete this role because users are assigned to it.');
         }
-        
+
         $role->delete();
 
         return redirect()->route('roles.index')

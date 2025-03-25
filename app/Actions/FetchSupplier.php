@@ -16,9 +16,9 @@ class FetchSupplier
             ->with('zone')
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%")
-                        ->orWhere('phone', 'like', "%{$search}%");
+                    ->orWhere('phone', 'like', "%{$search}%");
             })
-            ->when($zone_id, function($query) use($zone_id) {
+            ->when($zone_id, function ($query) use ($zone_id) {
                 $query->where('zone_id', $zone_id);
             })
             ->select('id', 'zone_id', 'name', 'phone', 'balance')

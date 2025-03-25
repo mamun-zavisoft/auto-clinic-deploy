@@ -64,6 +64,7 @@ class Drawer extends Model
             if ($product) {
                 $product->available_quantity = $item->available_quantity;
             }
+
             return $product;
         })->filter();
     }

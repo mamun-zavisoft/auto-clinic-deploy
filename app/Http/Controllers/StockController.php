@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class StockController extends Controller
@@ -47,7 +46,7 @@ class StockController extends Controller
             return [
                 'id' => $rack->id,
                 'name' => $rack->name,
-                'product_count' => $availableCount
+                'product_count' => $availableCount,
             ];
         })->filter(function ($rack) {
             // Only include racks with available stock
@@ -88,7 +87,7 @@ class StockController extends Controller
             return [
                 'id' => $drawer->id,
                 'name' => $drawer->name,
-                'product_count' => $availableCount
+                'product_count' => $availableCount,
             ];
         })->filter(function ($drawer) {
             // Only include drawers with available stock
@@ -128,7 +127,7 @@ class StockController extends Controller
 
         $stockInfo = [
             'available_qty' => $availableQty,
-            'sale_price' => $latestPurchase->sale_price
+            'sale_price' => $latestPurchase->sale_price,
         ];
 
         return response()->json(['stock' => $stockInfo]);

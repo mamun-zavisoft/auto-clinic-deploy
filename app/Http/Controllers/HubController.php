@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Hub;
 use App\Actions\FetchHub;
+use App\Models\Hub;
 use App\Models\Zone;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class HubController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
 
-        $hubs = (new FetchHub())->execute($request);
+        $hubs = (new FetchHub)->execute($request);
         $zones = Zone::select('id', 'name')->get();
 
         if ($request->ajax()) {
@@ -22,9 +23,10 @@ class HubController extends Controller
         return view('backend.hubs.index', compact('hubs', 'zones'));
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
-        try{
+        try {
             $request->validate([
                 'name' => 'required|string|max:50|unique:hubs,name',
                 'zone_id' => 'nullable|exists:zones,id',
@@ -40,26 +42,28 @@ class HubController extends Controller
                 'zone_id' => auth()->user()?->zone_id,
                 'custom_hub_id' => $request->custom_hub_id,
                 'phone' => $request->phone,
-                'address' => $request->address
+                'address' => $request->address,
             ]);
 
             DB::commit();
 
-            return response()->json(['message' => 'Hub created successfully', 'type' => 'success'],200);
-        }catch (\Throwable $th) {
+            return response()->json(['message' => 'Hub created successfully', 'type' => 'success'], 200);
+        } catch (\Throwable $th) {
             DB::rollBack();
+
             return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
         }
     }
 
-    public function update(Request $request, Hub $hub){
+    public function update(Request $request, Hub $hub)
+    {
 
-        try{
+        try {
 
             $request->validate([
                 'name' => 'required|string|max:50',
                 'zone_id' => 'nullable|exists:zones,id',
-                'custom_hub_id' => 'required|string|unique:hubs,custom_hub_id,' . $hub->id,
+                'custom_hub_id' => 'required|string|unique:hubs,custom_hub_id,'.$hub->id,
                 'phone' => 'nullable|string|max:15',
                 'address' => 'nullable|string|max:255',
             ]);
@@ -71,22 +75,24 @@ class HubController extends Controller
                 'zone_id' => auth()->user()?->zone_id,
                 'custom_hub_id' => $request->custom_hub_id,
                 'phone' => $request->phone,
-                'address' => $request->address
+                'address' => $request->address,
             ]);
 
             DB::commit();
 
-            return response()->json(['message' => 'Hub updated successfully', 'type' => 'success'],200);
-        }catch (\Throwable $th) {
+            return response()->json(['message' => 'Hub updated successfully', 'type' => 'success'], 200);
+        } catch (\Throwable $th) {
             DB::rollBack();
+
             return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
         }
     }
 
-    public function destroy(Hub $hub){
-        
+    public function destroy(Hub $hub)
+    {
+
         $hub->delete();
+
         return redirect()->back()->with('success', 'Hub deleted successfully!');
     }
-    
 }

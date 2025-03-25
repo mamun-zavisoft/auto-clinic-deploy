@@ -6,14 +6,11 @@ use App\Actions\FetchDrawer;
 use App\Models\Drawer;
 use App\Models\Rack;
 use Exception;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Symfony\Component\CssSelector\Node\FunctionNode;
 
 class DrawerController extends Controller
 {
-
     public function index(Request $request)
     {
         $drawers = (new FetchDrawer)->execute($request);
@@ -22,7 +19,7 @@ class DrawerController extends Controller
         if ($request->ajax()) {
             return view('components.drawers.table', ['drawers' => $drawers, 'racks' => $racks])->render();
         }
-       
+
         return view('backend.drawers.index', compact('drawers', 'racks'));
     }
 
@@ -48,7 +45,6 @@ class DrawerController extends Controller
         }
     }
 
-
     public function update(Request $request, Drawer $drawer)
     {
         try {
@@ -65,32 +61,33 @@ class DrawerController extends Controller
             }
 
             $drawer->update($data);
-            
+
             return response()->json(['message' => 'Drawer updated successfully', 'type' => 'success'], 200);
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
         }
     }
 
-
     public function destroy(Drawer $drawer)
     {
         $drawerCount = $drawer->productCount($drawer->id);
 
         if ($drawerCount > 0) {
-            return redirect()->back()->with('error', 'Drawer has ' . $drawerCount . ' products, cannot delete!');
+            return redirect()->back()->with('error', 'Drawer has '.$drawerCount.' products, cannot delete!');
         }
 
         $drawer->delete();
+
         return redirect()->back()->with('success', 'Drawer deleted successfully!');
     }
 
-    public function fetchDrawersByRack($rackId) {
+    public function fetchDrawersByRack($rackId)
+    {
         try {
             $rack = Rack::findOrFail($rackId);
 
             return response()->json(['data' => $rack->drawers, 'type' => 'success'], 200);
-        } catch(ModelNotFoundException) {
+        } catch (ModelNotFoundException) {
             return response()->json(['message' => 'Rack not found', 'type' => 'error'], 404);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage(), 'type' => 'error'], 500);

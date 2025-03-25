@@ -2,15 +2,14 @@
 
 namespace App\Media;
 
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Storage;
 
 trait HasMedia
 {
+    public $disk_name = 'public';
 
-    public  $disk_name = "public";
     public function getDiskName(): string
     {
         return $this->disk_name ?? config('filesystems.default');
@@ -27,15 +26,12 @@ trait HasMedia
     /**
      * Add media to the model and upload it to the specified disk.
      *
-     * @param \Illuminate\Http\UploadedFile $file
-     * @param string $collectionName
-     * @param array $attributes
-     * @return void
+     * @param  \Illuminate\Http\UploadedFile  $file
      */
     public function addMedia($file, string $collectionName, array $attributes = []): void
     {
-        if (!$this->exists) {
-            throw new \Exception("Cannot attach media to an unsaved model instance.");
+        if (! $this->exists) {
+            throw new \Exception('Cannot attach media to an unsaved model instance.');
         }
 
         try {
@@ -50,7 +46,6 @@ trait HasMedia
             // Store the file and get the file path
             $filePath = $file->store('media', $this->disk_name);
 
-
             $this->media()->create(array_merge(
                 $attributes,
                 [
@@ -62,41 +57,38 @@ trait HasMedia
                 ]
             ));
         } catch (\Exception $e) {
-            throw new \Exception("Media upload failed: " . $e->getMessage());
+            throw new \Exception('Media upload failed: '.$e->getMessage());
         }
     }
 
     /**
      * Retrieve media items for the model.
-     *
-     * @param string|null $collectionName
-     * @return array
      */
-    public function getMedia(string $collectionName = null): array
+    public function getMedia(?string $collectionName = null): array
     {
         $query = $this->media();
 
         if ($collectionName) {
             $query->where('collection_name', $collectionName);
         }
-        return   $query->get()->toArray();
+
+        return $query->get()->toArray();
     }
 
     /**
      * Retrieve the URL of the first media item for the given collection.
      *
-     * @param string|null $collectionName
+     * @param  string|null  $collectionName
      * @return string|null
      */
     public function getUrl($collectionName = null)
     {
         try {
 
-            $mediaCollect = collect($this->media)->filter(fn($media) => $collectionName ? $media->collection_name === $collectionName : true)->values();
-
+            $mediaCollect = collect($this->media)->filter(fn ($media) => $collectionName ? $media->collection_name === $collectionName : true)->values();
 
             $media = $mediaCollect->map(function ($media) {
-                return (object)[
+                return (object) [
                     'id' => $media->id,
                     'url' => Storage::disk($this->disk_name)->url($media->file_path),
                 ];
@@ -104,7 +96,7 @@ trait HasMedia
 
             return $media ?? [];
         } catch (\Exception $exception) {
-            throw new \Exception('Failed to retrieve media URL: ' . $exception->getMessage());
+            throw new \Exception('Failed to retrieve media URL: '.$exception->getMessage());
         }
     }
 
@@ -126,11 +118,8 @@ trait HasMedia
 
     /**
      * Delete media from the model.
-     *
-     * @param int $mediaId
-     * @return void
      */
-    public function deleteMedia(int $mediaId = null): void
+    public function deleteMedia(?int $mediaId = null): void
     {
         if ($mediaId) {
             $media = $this->media()->findOrFail($mediaId);

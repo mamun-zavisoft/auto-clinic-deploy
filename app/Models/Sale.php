@@ -9,8 +9,11 @@ class Sale extends Model
     protected $guarded = [];
 
     public static $FULL_DUE = 1;
+
     public static $PARTIAL_PAID = 2;
+
     public static $FULL_PAID = 3;
+
     public static $IN_HOUSE = 4;
 
     public function saleDetails()
@@ -38,18 +41,18 @@ class Sale extends Model
         return $query->where('type', 'external');
     }
 
-   public function service()
-   {
-       return $this->hasOne(Service::class);
-   }
+    public function service()
+    {
+        return $this->hasOne(Service::class);
+    }
 
-   public function products()
-   {
-       return $this->hasManyThrough(Product::class, SaleDetail::class, 'sale_id', 'id', 'id', 'product_id');
-   }
+    public function products()
+    {
+        return $this->hasManyThrough(Product::class, SaleDetail::class, 'sale_id', 'id', 'id', 'product_id');
+    }
 
-   public function account()
-   {
-       return $this->belongsTo(Account::class);
-   }
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
 }

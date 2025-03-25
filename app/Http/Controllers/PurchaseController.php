@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PurchaseRequest;
 use App\Models\Account;
-use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Supplier;
 use App\Services\PurchaseService;
@@ -29,17 +28,18 @@ class PurchaseController extends Controller
         $accounts = Account::select('id', 'name', 'balance')->get();
         $suppliers = Supplier::select('id', 'name')->get();
 
-        if(request()->ajax()) {
+        if (request()->ajax()) {
             return view('components.purchases.table', ['purchases' => $purchases])->render();
         }
 
-        return view('backend.purchases.index', compact('purchases', 'accounts','suppliers'));
+        return view('backend.purchases.index', compact('purchases', 'accounts', 'suppliers'));
     }
 
     public function create()
     {
         $accounts = Account::select('id', 'name', 'balance')->get();
         $suppliers = Supplier::select('id', 'name')->get();
+
         return view('backend.purchases.create', compact('suppliers', 'accounts'));
     }
 
@@ -59,13 +59,15 @@ class PurchaseController extends Controller
             }
 
             DB::commit();
+
             return response()->json([
                 'message' => 'Purchase created successfully.',
                 'type' => 'success',
-                'redirectUrl' =>  route('admin.purchases.index'),
+                'redirectUrl' => route('admin.purchases.index'),
             ], 201);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
@@ -124,6 +126,7 @@ class PurchaseController extends Controller
                 }
 
                 DB::commit();
+
                 return response()->json([
                     'message' => 'Purchase recorded as full due successfully.',
                     'type' => 'success',
@@ -133,16 +136,16 @@ class PurchaseController extends Controller
 
             // For partial_paid or full_paid
             $account = Account::findOrFail($request->account_id);
-            if (!$account) {
+            if (! $account) {
                 return response()->json(['message' => 'Account not found', 'type' => 'error'], 422);
             }
 
             if ($request->amount > $account->balance) {
-                return response()->json(['message' => 'Payment amount cannot be greater than account balance ' . $account->balance, 'type' => 'error'], 422);
+                return response()->json(['message' => 'Payment amount cannot be greater than account balance '.$account->balance, 'type' => 'error'], 422);
             }
 
             if ($request->payment_type == 'partial_paid' && $request->amount > $purchase->due_amount) {
-                return response()->json(['message' => 'Payment amount cannot be greater than due amount ' . $purchase->due_amount, 'type' => 'error'], 422);
+                return response()->json(['message' => 'Payment amount cannot be greater than due amount '.$purchase->due_amount, 'type' => 'error'], 422);
             }
 
             $latest_due_amount = $purchase->due_amount - $request->amount;
@@ -161,15 +164,14 @@ class PurchaseController extends Controller
             $account->balance = $account->balance - $request->amount;
             $account->save();
 
-            if($purchase->supplier) {
+            if ($purchase->supplier) {
                 $purchase->supplier->balance += $request->amount;
                 $purchase->supplier->save();
             }
-            
+
             if ($request->payment_type == 'full_paid') {
                 $amount = $purchase->grand_total - $purchase->paid_amount;
             }
-           
 
             // Update payment record and add payment detail
             $payment = $purchase->payment;
@@ -193,10 +195,11 @@ class PurchaseController extends Controller
             return response()->json([
                 'message' => 'Payment created successfully.',
                 'type' => 'success',
-                'redirectUrl' =>  route('admin.purchases.index'),
+                'redirectUrl' => route('admin.purchases.index'),
             ]);
         } catch (Exception $e) {
             DB::rollBack();
+
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
@@ -205,15 +208,16 @@ class PurchaseController extends Controller
     {
         $purchase = Purchase::find($id);
         $accounts = Account::select('id', 'name', 'balance')->get();
+
         return view('backend.purchases.view_payments', compact('purchase', 'accounts'));
     }
 
     public static function transactionIdGenerate()
     {
-        $prefix = "INV";
+        $prefix = 'INV';
 
-        $uniqueNumber = substr(time(), -5) . rand(10, 99);
+        $uniqueNumber = substr(time(), -5).rand(10, 99);
 
-        return $prefix . '-' . $uniqueNumber;
+        return $prefix.'-'.$uniqueNumber;
     }
 }

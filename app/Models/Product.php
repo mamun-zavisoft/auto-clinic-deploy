@@ -81,7 +81,7 @@ class Product extends Model implements Mediable
 
     /**
      * Get total available quantity for this product across all locations
-     * 
+     *
      * @return int Total available quantity
      */
     public function getTotalAvailableQuantity()
@@ -105,9 +105,9 @@ class Product extends Model implements Mediable
 
     /**
      * Get available quantity for this product in a specific drawer
-     * 
-     * @param int $rackId Rack ID
-     * @param int $drawerId Drawer ID
+     *
+     * @param  int  $rackId  Rack ID
+     * @param  int  $drawerId  Drawer ID
      * @return int Available quantity in the specified drawer
      */
     public function getDrawerAvailableQuantity($drawerId)
@@ -128,7 +128,7 @@ class Product extends Model implements Mediable
 
     /**
      * Get all racks that contain available quantities of this product
-     * 
+     *
      * @return \Illuminate\Support\Collection Collection of racks with available quantity
      */
     public function getAvailableRacks()

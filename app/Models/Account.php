@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Account extends Model
 {
     protected $guarded = [];
-    
-   public function paymentDetails()
+
+    public function paymentDetails()
     {
         return $this->hasMany(PaymentDetail::class);
     }
