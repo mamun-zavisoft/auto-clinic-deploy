@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Vehicle;
 use App\Models\Zone;
 use App\Models\Service;
+use App\Models\VehicleModel;
+use App\Models\Hub;
 use Illuminate\Support\Facades\DB;
 
 class VehiclesController extends Controller
@@ -16,11 +18,13 @@ class VehiclesController extends Controller
     {
         $vehicles = (new FetchVehicle)->execute($request);
         $zones = Zone::select('id', 'name')->get();
+        $vehicleModels = VehicleModel::select('id', 'name')->get();
+        $hubs = Hub::select('id', 'name')->get();
 
         if ($request->ajax()){
-            return view('components.vehicles.table', ['entity' => $vehicles])->render();
+            return view('components.vehicles.table', ['vehicles' => $vehicles, 'zones' => $zones, 'vehicleModels' => $vehicleModels, 'hubs' => $hubs])->render();
         }
-        return view('backend.vehicles.index', compact('vehicles', 'zones'));
+        return view('backend.vehicles.index', compact('vehicles', 'zones', 'vehicleModels', 'hubs'));
     }
 
 
@@ -28,23 +32,49 @@ class VehiclesController extends Controller
     {
         try{
 
-            $request->validate([
+            $data = $request->validate([
                 'owner_type' => 'required|in:1,2',
+                'vehicle_type' => 'required|in:1,2,3,4,5',
+                'hub_id' => 'required|exists:hubs,id',
+                'vehicle_model_id' => 'required|exists:vehicle_models,id',
+                'registration_date' => 'required|date',
+                'registration_validity' => 'required|date',
+                'tax_token_validity' => 'required|date',
+                'fitness_validity' => 'required|date',
+                'road_permit_validity' => 'required|date',
+                'insurance_validity' => 'required|date',
                 'license_plate' => 'required|string|max:50|unique:vehicles,license_plate',
+                'current_odometer' => 'required|numeric|min:0',
                 'status' => 'required|in:1,2'
             ]);
+
+            $data['registration_date'] = date('Y-m-d', strtotime($request->registration_date));
+            $data['registration_validity'] = date('Y-m-d', strtotime($request->registration_validity));
+            $data['tax_token_validity'] = date('Y-m-d', strtotime($request->tax_token_validity));
+            $data['fitness_validity'] = date('Y-m-d', strtotime($request->fitness_validity));
+            $data['road_permit_validity'] = date('Y-m-d', strtotime($request->road_permit_validity));
+            $data['insurance_validity'] = date('Y-m-d', strtotime($request->insurance_validity));
 
             DB::beginTransaction();
 
             $vehicle = Vehicle::create([
                 'owner_type' => $request->owner_type,
+                'vehicle_type' => $request->vehicle_type,
+                'hub_id' => $request->hub_id,
+                'vehicle_model_id' => $request->vehicle_model_id,
+                'registration_date' => $data['registration_date'],
+                'registration_validity' => $data['registration_validity'],
+                'tax_token_validity' => $data['tax_token_validity'],
+                'fitness_validity' => $data['fitness_validity'],
+                'road_permit_validity' => $data['road_permit_validity'],
+                'insurance_validity' => $data['insurance_validity'],
                 'license_plate' => $request->license_plate,
+                'current_odometer' => $request->current_odometer,
                 'zone_id' => auth()->user()?->zone_id,
                 'status' => $request->status
             ]);
 
             DB::commit();
-
             return response()->json(['message' => 'Vehicle created successfully!', 'type' => 'success', 'data' => $vehicle ],200);
         }catch (\Throwable $th) {
             DB::rollBack();
@@ -65,14 +95,34 @@ class VehiclesController extends Controller
         try{
             $request->validate([
                 'owner_type' => 'required|in:1,2',
+                'vehicle_type' => 'required|in:1,2,3,4,5,' . $vehicle->id,
+                'hub_id' => 'required|exists:hubs,id',
+                'vehicle_model_id' => 'required|exists:vehicle_models,id',
+                'registration_date' => 'required|date_format:Y-m-d',
+                'registration_validity' => 'required|date_format:Y-m-d',
+                'tax_token_validity' => 'required|date_format:Y-m-d',
+                'fitness_validity' => 'required|date_format:Y-m-d',
+                'road_permit_validity' => 'required|date_format:Y-m-d',
+                'insurance_validity' => 'required|date_format:Y-m-d',
                 'license_plate' => 'required|string|max:50|unique:vehicles,license_plate,' . $vehicle->id,
+                'current_odometer' => 'required|numeric|min:0',
                 'status' => 'required|in:1,2'
             ]);
 
 
             $vehicle->update([
                 'owner_type' => $request->owner_type,
+                'vehicle_type' => $request->vehicle_type,
+                'hub_id' => $request->hub_id,
+                'vehicle_model_id' => $request->vehicle_model_id,
+                'registration_date' => $request->registration_date,
+                'registration_validity' => $request->registration_validity,
+                'tax_token_validity' => $request->tax_token_validity,
+                'fitness_validity' => $request->fitness_validity,
+                'road_permit_validity' => $request->road_permit_validity,
+                'insurance_validity' => $request->insurance_validity,
                 'license_plate' => $request->license_plate,
+                'current_odometer' => $request->current_odometer,
                 'zone_id' => auth()->user()?->zone_id,
                 'status' => $request->status
             ]);

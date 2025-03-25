@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DrawerController;
+use App\Http\Controllers\HubController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchasesDetailController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\VehicleFuelController;
 use App\Http\Controllers\VehiclesController;
 use App\Http\Controllers\ZoneController;
+use App\Http\Controllers\VehicleModelController;
 use App\Models\Drawer;
 use App\Models\Purchase;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +41,8 @@ Route::middleware('auth')->name('admin.')->group(function () {
     Route::resource('/services', ServiceController::class);
     Route::resource('/sales', SaleController::class);
     Route::resource('/vehicle-fuels', VehicleFuelController::class);
+    Route::resource('/hubs', HubController::class);
+    Route::resource('/vehicle-models', VehicleModelController::class);
      
     // single action routes
     Route::get('/product/search', [ProductController::class, 'search'])->name('products.search');

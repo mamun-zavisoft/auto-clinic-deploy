@@ -39,6 +39,10 @@
                                 href="{{ route('admin.accounts.index') }}">
                                 <i data-feather="credit-card"></i><span>Accounts</span></a>
                         </li>
+                        <li class="{{ Request::is('vehicle-model*') ? 'active' : '' }}"><a
+                                href="{{ route('admin.vehicle-models.index') }}">
+                                <i data-feather="package"></i><span>Vehicle Models</span></a>
+                        </li>
                         <li class="{{ Request::is('vehicles*') ? 'active' : '' }}"><a
                                 href="{{ route('admin.vehicles.index') }}">
                                 <i data-feather="truck"></i><span>Vehicles</span></a>
@@ -48,6 +52,10 @@
                                 <i data-feather="filter"></i><span>Fueling</span></a>
                         </li>
 
+                        <li class="{{ Request::is('hubs*') ? 'active' : '' }}"><a
+                                href="{{ route('admin.hubs.index') }}">
+                                <i data-feather="share-2"></i><span>Hub</span></a>
+                        </li>
                     </ul>
                 </li>
                 {{-- purchase --}}
