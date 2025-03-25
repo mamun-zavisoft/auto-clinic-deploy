@@ -27,9 +27,11 @@ class ServiceChartController extends Controller
         try{
             $request->validate([
                 'name' => 'required|string|max:50|unique:service_charts,name',
-                'price' => 'required|numeric|min:1',
+                'price' => 'required|numeric|min:1|max:10000000',
                 'description' => 'nullable|string|max:4000',
-                'code' => 'required|string|max:50|unique:service_charts,code'
+                'code' => 'nullable|string|max:50|unique:service_charts,code'
+            ],[
+                'price.max' => 'The price must not be greater than 10,000,000'
             ]);
 
             DB::beginTransaction();
@@ -55,14 +57,12 @@ class ServiceChartController extends Controller
         try{
             $request->validate([
                 'name' => 'required|string|max:50|unique:service_charts,name,' . $serviceChart->id,
-                'price' => 'required|numeric|min:1,' . $serviceChart->id,
+                'price' => 'required|numeric|max:10000000|min:1,' . $serviceChart->id,
                 'description' => 'nullable|string|max:4000,' . $serviceChart->id,
-                'code' => 'required|string|max:50|unique:service_charts,code,' . $serviceChart->id
+                'code' => 'nullable|string|max:50|unique:service_charts,code,' . $serviceChart->id
+            ], [
+                'price.max' => 'The price must not be greater than 10,000,000'
             ]);
-
-            if ($request->price > 14) {
-                return response()->json(['message' => 'Balance must be less than 14', 'type' => 'error']);
-            }
 
             $serviceChart->update([
                 'name' =>$request->name,
