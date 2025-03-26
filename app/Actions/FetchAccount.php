@@ -16,7 +16,6 @@ class FetchAccount
         return Account::query()
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('type', 'like', "%{$search}%")
                     ->orWhere('balance', 'like', "%{$search}%");
             })
             ->when($account_Type, function ($query) use ($account_Type) {

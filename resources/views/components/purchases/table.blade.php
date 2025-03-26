@@ -16,7 +16,7 @@
     <tbody>
         @forelse ($purchases as $purchase)
             <tr>
-                <td class="fw-bold">#{{ $purchase->transaction_id }}</td>
+                <td class="fw-bold">{{ $purchase->transaction_id }}</td>
                 <td>{{ $purchase->supplier?->name }}</td>
                 <td>{{ $purchase->reference_no }}</td>
                 <td>{{ $purchase->date }}</td>

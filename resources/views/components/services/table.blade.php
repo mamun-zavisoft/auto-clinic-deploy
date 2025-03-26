@@ -130,7 +130,7 @@
                             <!-- Table Head -->
                             <div class="d-flex fw-bold border-bottom pb-2">
                                 <div class="p-2" style="flex: 1;">Service Name</div>
-                                <div class="p-2" style="flex: 1;">Unit Price</div>
+                                <div class="p-2" style="flex: 1;">Price</div>
                                 <div class="p-2" style="flex: 1;">Code</div>
                             </div>
 
@@ -139,7 +139,8 @@
                                 <div class="d-flex border-bottom py-2">
                                     <div class="p-2" style="flex: 1;">{{ $data->serviceChart?->name }}</div>
                                     <div class="p-2" style="flex: 1;">{{ number_format($data->serviceChart?->price )}}</div>
-                                    <div class="p-2" style="flex: 1;">{{ $data->serviceChart?->code }}</div>
+                                    <div class="p-2" style="flex: 1;">{{ $data->serviceChart->code ?? 'N/A' }}
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
