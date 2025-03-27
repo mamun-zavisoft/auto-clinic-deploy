@@ -1,6 +1,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th class="no-sort">SL</th>
             <th>Invoice No</th>
             <th>Supplier Name</th>
             <th>Reference</th>
@@ -16,7 +17,8 @@
     <tbody>
         @forelse ($purchases as $purchase)
             <tr>
-                <td class="fw-bold">{{ $purchase->transaction_id }}</td>
+                <td>{{ $loop->iteration + $purchases->firstItem() - 1 }}</td>
+                <td class="fw-bold"><span class="copyable">{{ $purchase->transaction_id }}</span></td>
                 <td>{{ $purchase->supplier?->name }}</td>
                 <td>{{ $purchase->reference_no }}</td>
                 <td>{{ $purchase->date }}</td>

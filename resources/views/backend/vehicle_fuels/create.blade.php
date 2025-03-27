@@ -75,7 +75,7 @@
 
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="modal-footer-btn">
+                                <div class="modal-footer-btn" style="margin-top: 0 ! important">
                                     <button type="button" class="btn btn-cancel me-2"
                                         onclick="window.location.href='{{ route('admin.vehicle-fuels.index') }}'">Cancel</button>
                                     <button type="submit" class="btn btn-submit" id="submit_btn">Save</button>
