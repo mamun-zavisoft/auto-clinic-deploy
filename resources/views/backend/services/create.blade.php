@@ -229,10 +229,9 @@
     </div>
 
     <!-- Add Vehicle -->
-     
     <div class="modal fade" id="add-vehicle">
-        <div class="modal-dialog modal-dialog-centered custom-modal-two">
-            <div class="modal-content">
+        <div class="modal-dialog modal-dialog-centered custom-modal-two" style="max-width: 95%; width: 1400px; max-height: 95vh; height: 90vh;">
+            <div class="modal-content" style="height: 100%;"> 
                 <div class="page-wrapper-new p-0">
                     <div class="content">
                         <div class="modal-header border-0 custom-modal-header justify-content-between">
@@ -249,33 +248,90 @@
                     </div>
                         <div class="modal-body custom-modal-body new-employee-field">
                             <form action="{{ route('admin.vehicles.store') }}" method="POST"
-                                id="storeForm1">
+                                id="storeForm">
                                 @csrf
-                                <div class="mb-3">
-                                    <label class="form-label">Owner Type*</label>
-                                    <select class="select3 form-control" name="owner_type">
-                                        <option value="">Choose</option>
-                                        <option value="1">Self</option>
-                                        <option value="2">External</option>
-                                    </select>
+                                <div class="row">
+                                    <div class="mb-3 col-6">
+                                        <label class="form-label">Owner Type*</label>
+                                        <select name="owner_type" class="form-select">
+                                            <option value="">Choose</option>
+                                            <option value="1">Self</option>
+                                            <option value="2">External</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-6">
+                                        <label class="form-label">Register Number*</label>
+                                        <input type="text" name="license_plate" class="form-control">
+                                    </div>
+                                    <div class="mb-3 col-6">
+                                        <label class="form-label">Status</label>
+                                        <select name="status" class="form-select">
+                                            <option value="">Choose</option>
+                                            <option value="1">Active</option>
+                                            <option value="2">Inactive</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-6">
+                                        <label class="form-label">Select Hub</label>
+                                        <select name="hub_id" class="form-select">
+                                            <option value="">Choose</option>
+                                            @foreach ($hubs as $hub)
+                                            <option value="{{ $hub->id }}">{{ $hub->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-6">
+                                        <label class="form-label">Vehicle Type</label>
+                                        <select name="vehicle_type" class="form-select">
+                                            <option value="">Choose</option>
+                                            <option value="1">Covered Van</option>
+                                            <option value="2">Motor Bike</option>
+                                            <option value="3">Pick Up</option>
+                                            <option value="4">Truck</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-6">
+                                        <label class="form-label">Select Model</label>
+                                        <select name="model_id" class="form-select">
+                                            <option value="">Choose</option>
+                                            @foreach ($vehicleModels as $model)
+                                            <option value="{{ $model->id }}">{{ $model->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-6">
+                                        <label class="form-label">ODO(current odometer)</label>
+                                        <input type="number" name="current_odometer" class="form-control" placeholder="Current Mileage"  onwheel="this.blur()">
+                                    </div>
+                                    <div class="mb-3 col-6">
+                                        <label class="form-label">Registration Date</label>
+                                        <input type="date" name="registration_date" class="form-control">
+                                    </div>
+                                    <div class="mb-3 col-6">
+                                        <label class="form-label">Registration Validity</label>
+                                        <input type="date" name="registration_validity" class="form-control">
+                                    </div>
+                                    <div class="mb-3 col-6">
+                                        <label class="form-label">Tax Token Validity</label>
+                                        <input type="date" name="tax_token_validity" class="form-control">
+                                    </div>
+                                    <div class="mb-3 col-6">
+                                        <label class="form-label">Fitness Validity</label>
+                                        <input type="date" name="fitness_validity" class="form-control">
+                                    </div>
+                                    <div class="mb-3 col-6">
+                                        <label class="form-label">Road Permit Validity</label>
+                                        <input type="date" name="road_permit_validity" class="form-control">
+                                    </div>
+                                    <div class="mb-3 col-6">
+                                        <label class="form-label">Insurance Validity</label>
+                                        <input type="date" name="insurance_validity" class="form-control">
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Vehicle Register Number*</label>
-                                    <input type="text" name="license_plate" class="form-control">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Status*</label>
-                                    <select class="select3 form-control" name="status">
-                                        <option value="">Choose</option>
-                                        <option value="1">Active</option>
-                                        <option value="2">In Service</option>
-                                    </select>
-                                </div>
-
                                 <div class="modal-footer-btn">
                                     <button type="button" class="btn btn-cancel me-2"
                                         data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-submit" id="submit_btn1">Save</button>
+                                    <button type="submit" class="btn btn-submit" id="submit_btn">Save</button>
                                 </div>
                             </form>
                         </div>
@@ -337,6 +393,7 @@
             </div>
         </div>
     </template>
+
 @endsection
 
 @push('scripts')
@@ -1005,6 +1062,43 @@
                     }
                 });
             });
+            $('#storeForm').submit(function(e) {
+                e.preventDefault();
+                let SubmitBtn = $('#submit_btn');
+                SubmitBtn.prop('disabled', true);
+                let formData = new FormData(this);
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                }).done(function(response) {
+                    if (response.type == 'success') {
+                        $('#add-vehicle').modal('hide');
+                        toastr.success(response.message);
+                        $('#storeForm').trigger('reset');
+                    } else {
+                        SubmitBtn.prop('disabled', false);
+                        toastr.error(response.message);
+                    }
+                }).fail(function(xhr) {
+                    SubmitBtn.prop('disabled', false);
+                    $('#submit_btn').attr('disabled', false);
+                    let response = xhr.responseJSON;
+                    if (response && response.errors) {
+                        $.each(response.errors, function(key, value) {
+                            toastr.error(value);
+                        });
+                    }
+                    if (response && response.message) {
+                        toastr.error(response.message);
+                    } else {
+                        toastr.error('An error occurred. Please try again.');
+                    }
+                })
+            })
         });
     </script>
 @endpush
