@@ -10,6 +10,8 @@ use App\Models\Service;
 use App\Models\ServiceChart;
 use App\Models\ServiceDetail;
 use App\Models\Vehicle;
+use App\Models\Hub;
+use App\Models\VehicleModel;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,8 +40,10 @@ class ServiceController extends Controller
         $serviceCharts = ServiceChart::all();
         $products = Product::get();
         $accounts = Account::select('id', 'name', 'balance')->get();
+        $hubs = Hub::select('id', 'name')->get();
+        $vehicleModels = VehicleModel::select('id', 'name')->get();
 
-        return view('backend.services.create', compact('vehicles', 'serviceCharts', 'products', 'accounts'));
+        return view('backend.services.create', compact('vehicles', 'serviceCharts', 'products', 'accounts', 'hubs', 'vehicleModels'));
     }
 
     /**
