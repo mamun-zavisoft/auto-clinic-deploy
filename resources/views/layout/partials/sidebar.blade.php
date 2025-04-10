@@ -32,10 +32,12 @@
 
                 {{-- Purchases --}}
                 <li class="submenu-open">
+                    @permission('purchase-list')
                     <h6 class="submenu-hdr">Purchases</h6>
                     <ul>
                         <li class="{{ Request::is('purchases*') ? 'active' : '' }}"><a href="{{ route('admin.purchases.index') }}"><i data-feather="shopping-bag"></i><span>Purchases</span></a></li>
                     </ul>
+                    @endpermission
                 </li>
 
                 {{-- Inventory --}}
