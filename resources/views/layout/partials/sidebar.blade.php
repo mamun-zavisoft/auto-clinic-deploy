@@ -4,24 +4,45 @@
         <div id="sidebar-menu" class="sidebar-menu">
             <ul>
                 {{-- Quick Actions --}}
+                @permission(['service-list', 'sale-list', 'purchase-list', 'product-list', 'vehicle-list'])
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Quick Actions</h6>
                     <ul>
+                        @permission('service-list')
                         <li><a href="{{ route('admin.services.create') }}"><i data-feather="plus"></i><span>Add Service</span></a></li>
-                        <li><a href="{{ route('admin.sales.create') }}"><i data-feather="shopping-cart"></i><span>Add Sale</span></a></li>
-                        <li><a href="{{ route('admin.purchases.create') }}"><i data-feather="shopping-bag"></i><span>Make Purchase</span></a></li>
-                        <li><a href="{{ route('admin.vehicle-fuels.create') }}"><i data-feather="filter"></i><span>Fueling</span></a></li>
+                        @endpermission
 
+                        @permission('sale-list')
+                        <li><a href="{{ route('admin.sales.create') }}"><i data-feather="shopping-cart"></i><span>Add Sale</span></a></li>
+                        @endpermission
+
+                        @permission('purchase-list')
+                        <li><a href="{{ route('admin.purchases.create') }}"><i data-feather="shopping-bag"></i><span>Make Purchase</span></a></li>
+                        @endpermission
+
+                        @permission('product-list')
+                        <li><a href="{{ route('admin.vehicle-fuels.create') }}"><i data-feather="filter"></i><span>Fueling</span></a></li>
+                        @endpermission
+
+                        @permission('vehicle-list')
                         <li class="{{ Request::is('vehicles*') ? 'active' : '' }}"><a href="{{ route('admin.vehicles.index') }}"><i data-feather="truck"></i><span>Vehicles</span></a></li>
+                        @endpermission
+                        
                     </ul>
                 </li>
+                @endpermission
 
                 {{-- Dashboard --}}
+                @permission('dashboard')
                 <li class="{{ Request::is('/') ? 'active' : '' }}">
                     <a href="{{ route('dashboard') }}"><i data-feather="home"></i><span>Dashboard</span></a>
                 </li>
+                @endpermission
+
+                {{-- Calendar --}}
 
                 {{-- Sales & Services --}}
+                @permission(['sale-list', 'service-list'])
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Sales & Services</h6>
                     <ul>
@@ -34,22 +55,29 @@
                         @endpermission
                     </ul>
                 </li>
+                @endpermission
+
+                {{-- Services --}}
 
                 {{-- Purchases --}}
+                @permission('purchase-list')
                 <li class="submenu-open">
-                    @permission('purchase-list')
                     <h6 class="submenu-hdr">Purchases</h6>
                     <ul>
                         <li class="{{ Request::is('purchases*') ? 'active' : '' }}"><a href="{{ route('admin.purchases.index') }}"><i data-feather="shopping-bag"></i><span>Purchases</span></a></li>
                     </ul>
-                    @endpermission
                 </li>
+                @endpermission
 
                 {{-- Inventory --}}
+                @permission(['product-list', 'category-list', 'brand-list', 'rack-list', 'drawer-list', 'service-chart-list'])
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Inventory</h6>
                     <ul>
+                        @permission('product-list')
                         <li class="{{ Request::is('products*') ? 'active' : '' }}"><a href="{{ route('admin.products.index') }}"><i data-feather="box"></i><span>Products</span></a></li>
+                        @endpermission
+                        
                         @permission('category-list')
                         <li class="{{ Request::is('categories') ? 'active' : '' }}"><a href="{{ route('admin.categories.index') }}"><i data-feather="codepen"></i><span>Category</span></a></li>
                         @endpermission
@@ -71,8 +99,10 @@
                         @endpermission
                     </ul>
                 </li>
+                @endpermission
 
                 {{-- Vehicles --}}
+                @permission(['vehicle-model-list', 'vehicle-list', 'vehicle-fuel-list'])
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Vehicles</h6>
                     <ul>
@@ -89,36 +119,43 @@
                         @endpermission
                     </ul>
                 </li>
+                @endpermission
+
+                {{-- Customers --}}
 
                 {{-- Accounts & Finance --}}
-                <li class="submenu-open">
                 @permission('account-list')
+                <li class="submenu-open">
                     <h6 class="submenu-hdr">Accounts & Finance</h6>
                     <ul>
                         <li class="{{ Request::is('accounts*') ? 'active' : '' }}"><a href="{{ route('admin.accounts.index') }}"><i data-feather="credit-card"></i><span>Accounts</span></a></li>
                     </ul>
-                @endpermission
                 </li>
+                @endpermission
+
                 
                 {{-- Report --}}
+                @permission('vehicle-report-list')
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Report</h6>
                     <ul>
                         <li class="{{ Request::is('vehicles.report*') ? 'active' : '' }}"><a href="{{ route('admin.vehicle.reports.index') }}"><i data-feather="bar-chart-2"></i><span>Vehicle Report</span></a></li>
                     </ul>
                 </li>
+                @endpermission
 
                 {{-- Hubs --}}
+                @permission('hub-list')
                 <li class="submenu-open">
-                    @permission('hub-list')
                     <h6 class="submenu-hdr">Hubs</h6>
                     <ul>
                         <li class="{{ Request::is('hubs*') ? 'active' : '' }}"><a href="{{ route('admin.hubs.index') }}"><i data-feather="share-2"></i><span>Hub</span></a></li>
                     </ul>
-                    @endpermission
                 </li>
+                @endpermission
 
                 {{-- Peoples --}}
+                @permission(['customer-list', 'supplier-list', 'zone-list'])
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Peoples</h6>
                     <ul>
@@ -131,8 +168,12 @@
                         @endpermission
                     </ul>
                 </li>
+                @endpermission
+
+                {{-- Settings --}}
 
                 {{-- User Management --}}
+                @permission(['user-list', 'role-list'])
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">User Management</h6>
                     <ul>
@@ -145,6 +186,9 @@
                         @endpermission
                     </ul>
                 </li>
+                @endpermission
+
+                {{-- Settings --}}
 
                 {{-- Settings & Logout --}}
                 <li class="submenu-open">
