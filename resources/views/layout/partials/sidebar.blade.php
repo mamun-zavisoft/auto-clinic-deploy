@@ -25,8 +25,13 @@
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Sales & Services</h6>
                     <ul>
+                        @permission('sale-list')
                         <li class="{{ Request::is('sales*') ? 'active' : '' }}"><a href="{{ route('admin.sales.index') }}"><i data-feather="shopping-cart"></i><span>Sale</span></a></li>
+                        @endpermission
+
+                        @permission('service-list')
                         <li class="{{ Request::is('services*') ? 'active' : '' }}"><a href="{{ route('admin.services.index') }}"><i data-feather="truck"></i><span>Services</span></a></li>
+                        @endpermission
                     </ul>
                 </li>
 
