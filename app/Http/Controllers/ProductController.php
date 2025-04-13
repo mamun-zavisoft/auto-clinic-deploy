@@ -29,7 +29,7 @@ class ProductController extends Controller
             return view('components.products.table', ['products' => $products])->render();
         }
 
-        return view('backend.products.index', compact('products', 'categories', 'brands'));
+        return view('backend.products.index', ['title' => 'Products'], compact('products', 'categories', 'brands'));
     }
 
     public function create()
@@ -90,7 +90,7 @@ class ProductController extends Controller
         $brands = Brand::select('id', 'name')->get();
         $categories = Category::select('id', 'name')->get();
 
-        return view('backend.products.edit', compact('brands', 'categories', 'product'));
+        return view('backend.products.edit', ['title' => 'Edit Product'], compact('brands', 'categories', 'product'));
     }
 
     public function update(Request $request, Product $product)

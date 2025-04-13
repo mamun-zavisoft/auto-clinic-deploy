@@ -35,7 +35,7 @@ class PurchaseController extends Controller
             return view('components.purchases.table', ['purchases' => $purchases])->render();
         }
 
-        return view('backend.purchases.index', compact('purchases', 'accounts', 'suppliers'));
+        return view('backend.purchases.index', ['title' => 'Purchases'], compact('purchases', 'accounts', 'suppliers'));
     }
 
     public function create()
@@ -44,7 +44,7 @@ class PurchaseController extends Controller
         $suppliers = Supplier::select('id', 'name')->get();
         $zones = Zone::select('id', 'name')->get();
 
-        return view('backend.purchases.create', compact('suppliers', 'accounts', 'zones'));
+        return view('backend.purchases.create', ['title' => 'Create Purchase'], compact('suppliers', 'accounts', 'zones'));
     }
 
     public function store(PurchaseRequest $request)

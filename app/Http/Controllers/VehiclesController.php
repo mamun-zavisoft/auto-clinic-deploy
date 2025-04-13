@@ -33,7 +33,7 @@ class VehiclesController extends Controller
             return view('components.vehicles.table', ['vehicles' => $vehicles, 'zones' => $zones, 'vehicleModels' => $vehicleModels, 'hubs' => $hubs])->render();
         }
 
-        return view('backend.vehicles.index', compact('vehicles', 'zones', 'vehicleModels', 'hubs'));
+        return view('backend.vehicles.index', ['title' => 'Vehicles'], compact('vehicles', 'zones', 'vehicleModels', 'hubs'));
     }
 
     public function store(Request $request)

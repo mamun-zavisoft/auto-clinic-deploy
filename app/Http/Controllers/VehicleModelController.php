@@ -26,7 +26,7 @@ class VehicleModelController extends Controller
             return view('components.vehicleModels.table', ['vehicleModels' => $vehicleModels])->render();
         }
 
-        return view('backend.vehicleModels.index', compact('vehicleModels'));
+        return view('backend.vehicleModels.index', ['title' => 'Vehicle Models'], compact('vehicleModels'));
     }
 
     public function store(Request $request)

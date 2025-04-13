@@ -23,7 +23,7 @@ class CategoryController extends Controller
             return view('components.categories.table', ['categories' => $categories])->render();
         }
 
-        return view('backend.categories.index', compact('categories'));
+        return view('backend.categories.index', ['title' => 'Category'], compact('categories'));
     }
 
     public function store(Request $request)

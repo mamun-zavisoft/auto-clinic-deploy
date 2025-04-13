@@ -10,7 +10,7 @@
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Fast Auto Clinic</title>
+    <title>{{ $title ?? 'Fast Auto Clinic' }}</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon"

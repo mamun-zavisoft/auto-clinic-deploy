@@ -28,7 +28,7 @@ class DrawerController extends Controller
             return view('components.drawers.table', ['drawers' => $drawers, 'racks' => $racks])->render();
         }
 
-        return view('backend.drawers.index', compact('drawers', 'racks'));
+        return view('backend.drawers.index', ['title' => 'Drawers'], compact('drawers', 'racks'));
     }
 
     public function store(Request $request)

@@ -24,7 +24,7 @@ class AccountController extends Controller
             return view('components.accounts.table', ['accounts' => $accounts])->render();
         }
 
-        return view('backend.accounts.index', compact('accounts'));
+        return view('backend.accounts.index', ['title' => 'Accounts'], compact('accounts'));
     }
 
     public function store(Request $request)

@@ -24,7 +24,7 @@ class BrandController extends Controller
             return view('components.brands.table', ['brands' => $brands])->render();
         }
 
-        return view('backend.brands.index', compact('brands'));
+        return view('backend.brands.index', ['title' => 'Brands'], compact('brands'));
     }
 
     public function store(Request $request)

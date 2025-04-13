@@ -30,7 +30,7 @@ class HubController extends Controller
             return view('components.hubs.table', ['hubs' => $hubs, 'zones' => $zones])->render();
         }
 
-        return view('backend.hubs.index', compact('hubs', 'zones'));
+        return view('backend.hubs.index', ['title' => 'Hubs'], compact('hubs', 'zones'));
     }
 
     public function store(Request $request)

@@ -25,7 +25,7 @@ class ServiceChartController extends Controller
             return view('components.serviceCharts.table', ['serviceCharts' => $serviceCharts])->render();
         }
 
-        return view('backend.serviceCharts.index', compact('serviceCharts'));
+        return view('backend.serviceCharts.index', ['title' => 'Service Charts'], compact('serviceCharts'));
 
     }
 

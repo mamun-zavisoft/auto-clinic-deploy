@@ -30,7 +30,7 @@ class VehicleFuelController extends Controller
             return view('components.vehicleFuels.table', ['entity' => $vehicleFuels])->render();
         }
 
-        return view('backend.vehicle_fuels.index', compact('vehicleFuels'));
+        return view('backend.vehicle_fuels.index', ['title' => 'Vehicle Fuels'], compact('vehicleFuels'));
     }
 
     /**

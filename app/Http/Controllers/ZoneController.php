@@ -26,7 +26,7 @@ class ZoneController extends Controller
             return view('components.zones.table', ['zones' => $zones])->render();
         }
 
-        return view('backend.zones.index', compact('zones'));
+        return view('backend.zones.index', ['title' => 'Zones'], compact('zones'));
 
     }
 

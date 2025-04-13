@@ -27,7 +27,7 @@ class SaleController extends Controller
             return view('components.sales.table', ['sales' => $sales])->render();
         }
 
-        return view('backend.sales.index', compact('sales'));
+        return view('backend.sales.index', ['title' => 'Sales'], compact('sales'));
     }
 
     /**
@@ -38,7 +38,7 @@ class SaleController extends Controller
         $accounts = Account::select('id', 'name', 'balance')->get();
         $products = Product::select('id', 'name', 'purchase_price', 'sale_price', 'total_available_qty')->get();
 
-        return view('backend.sales.create', get_defined_vars());
+        return view('backend.sales.create', ['title' => 'Create Sales'], get_defined_vars());
     }
 
     public function store(Request $request)
