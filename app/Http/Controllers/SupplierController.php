@@ -24,7 +24,7 @@ class SupplierController extends Controller
             return view('components.suppliers.table', ['suppliers' => $suppliers, 'zones' => $zones])->render();
         }
 
-        return view('backend.suppliers.index', compact('suppliers', 'zones'));
+        return view('backend.suppliers.index', ['title' => 'Suppliers'], compact('suppliers', 'zones'));
     }
 
     public function store(Request $request)
@@ -34,6 +34,7 @@ class SupplierController extends Controller
             'zone_id' => 'required|exists:zones,id',
             'phone' => 'required|regex:/^01[3-9]\d{8}$/|unique:suppliers,phone',
             'balance' => 'nullable|numeric|min:0',
+            'balance_type' => 'nullable|in:advance,due',
         ],
             [
                 'zone_id.required' => 'The zone field is required.',
@@ -43,8 +44,17 @@ class SupplierController extends Controller
                 'name' => $request->name,
                 'zone_id' => $request->zone_id,
                 'phone' => $request->phone,
-                'balance' => $request->balance ?? 0,
             ]);
+
+            // Set balance based on balance_type
+            if ($request->balance_type == 'advance') {
+                $supplier->balance = $request->balance;
+            }elseif ($request->balance_type == 'due') {
+                $supplier->balance = -($request->balance);
+            }else {
+                $supplier->balance = 0;
+            }
+            $supplier->save();
 
             return response()->json(['message' => 'Supplier created successfully!', 'type' => 'success', 'supplier' => $supplier], 200);
         } catch (\Throwable $th) {

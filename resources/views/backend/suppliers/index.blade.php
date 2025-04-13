@@ -70,7 +70,14 @@
                                     <input type="text" class="form-control"
                                         value="{{ old('phone') }}" name="phone">
                                 </div>
-
+                                <div class="mb-3">
+                                    <label for="form-label">Balance Type</label>
+                                    <select class="select" name="balance_type">
+                                        <option value="">Select Balance Type</option>
+                                        <option value="advance">Advance</option>
+                                        <option value="due">Due</option>
+                                    </select>
+                                </div>
                                 <div class="mb-3">
                                     <label class="form-label">Balance</label>
                                     <input type="text" class="form-control"
