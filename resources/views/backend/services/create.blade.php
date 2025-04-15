@@ -723,7 +723,7 @@
                             row.find('.part-quantity')
                                 .prop('disabled', false)
                                 .attr('max', availableQty)
-                                .val(0);
+                                .val(1);
 
                             row.find('.stock-info').text(`Available: ${availableQty}`);
                             row.find('.part-unit-price').text(`Unit Price: ${salePrice}`);

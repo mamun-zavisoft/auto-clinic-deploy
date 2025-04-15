@@ -29,9 +29,12 @@
                 @permission(['role-update', 'role-delete'])
                 <td class="action-table-data">
                     <div class="edit-delete-action">
+                        @permission('role-update')
                         <a href="{{ route('roles.edit', $role->id) }}" class="me-2 p-2">
                             <i data-feather="edit" class="feather-edit"></i>
                         </a>
+                        @endpermission
+                        @permission('role-delete')
                         <a class="me-2 p-2 confirm-text" href="javascript:void(0);">
                             <i data-feather="trash-2" class="feather-trash-2"></i>
                         </a>
@@ -39,6 +42,7 @@
                             @csrf
                             @method('DELETE')
                         </form>
+                        @endpermission
                     </div>
                 </td>
                 @endpermission
