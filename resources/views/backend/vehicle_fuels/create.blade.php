@@ -217,22 +217,46 @@
             });
             
             // Don't get negative values in fuel qty
-            $('#fuel_qty').on('keypress', function (e) {
-                if (e.key === '-' ){
-                    e.preventDefault();
+            $('#fuel_qty').on('keypress', function () {
+                if (event.key === '-' ){
+                        Swal.fire({
+                        title: 'Oops...',
+                        text: 'Fuel quantity cannot be negative!',
+                        didOpen: () => {
+                            const popup = document.querySelector('.swal2-popup');
+                            popup.style.width = '400px';
+                            popup.style.height = '170px';
+                        }
+                    });
                 }
             });
 
             // Don't get negative values in fuel rate
-            $('#fuel_rate').on('keypress', function (e) {
-                if (e.key === '-' ){
-                    e.preventDefault();
+            $('#fuel_rate').on('keypress', function () {
+                if (event.key === '-' ){
+                        Swal.fire({
+                        title: 'Oops...',
+                        text: 'Fuel rate cannot be negative!',
+                        didOpen: () => {
+                            const popup = document.querySelector('.swal2-popup');
+                            popup.style.width = '400px';
+                            popup.style.height = '170px';
+                        }
+                    });
                 }
             });
 
-            $('#odo_meter').on('keypress', function (e) {
-                if (e.key === '-' ){
-                    e.preventDefault();
+            $('#odo_meter').on('keypress', function () {
+                if (event.key === '-' ){
+                        Swal.fire({
+                        title: 'Oops...',
+                        text: 'Odo meter cannot be negative!',
+                        didOpen: () => {
+                            const popup = document.querySelector('.swal2-popup');
+                            popup.style.width = '400px';
+                            popup.style.height = '170px';
+                        }
+                    });
                 }
             });
         });
