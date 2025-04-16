@@ -29,7 +29,7 @@ class RackController extends Controller
             return view('components.racks.table', ['racks' => $racks])->render();
         }
 
-        return view('backend.racks.index', compact('racks', 'zones'));
+        return view('backend.racks.index', ['title' => 'Racks'], compact('racks', 'zones'));
     }
 
     public function store(Request $request)

@@ -30,7 +30,7 @@ class VehicleFuelController extends Controller
             return view('components.vehicleFuels.table', ['entity' => $vehicleFuels])->render();
         }
 
-        return view('backend.vehicle_fuels.index', compact('vehicleFuels'));
+        return view('backend.vehicle_fuels.index', ['title' => 'Vehicle Fuels'], compact('vehicleFuels'));
     }
 
     /**
@@ -116,11 +116,16 @@ class VehicleFuelController extends Controller
         $vehicleFuel->update([
             'vehicle_id' => $request->vehicle_id,
             'fuel_type' => $request->fuel_type,
-            'current_odometer' => $request->current_odometer,
+            // 'current_odometer' => $request->current_odometer,
             'fuel_qty' => $request->fuel_qty,
             'fuel_rate' => $request->fuel_rate,
             'total_price' => $request->fuel_qty * $request->fuel_rate,
         ]);
+
+        // Check if the current odometer is less than the last odometer
+        if ($request->current_odometer < $vehicleFuel->vehicle->current_odometer) {
+            return response()->json(['message' => 'Current odometer must be greater than last odometer', 'type' => 'error']);
+        }
 
         return response()->json(['message' => 'Fuel entry updated successfully!', 'type' => 'success', 'redirectUrl' => route('admin.vehicle-fuels.index')]);
     }

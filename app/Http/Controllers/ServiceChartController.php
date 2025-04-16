@@ -25,7 +25,7 @@ class ServiceChartController extends Controller
             return view('components.serviceCharts.table', ['serviceCharts' => $serviceCharts])->render();
         }
 
-        return view('backend.serviceCharts.index', compact('serviceCharts'));
+        return view('backend.serviceCharts.index', ['title' => 'Service Charts'], compact('serviceCharts'));
 
     }
 
@@ -52,7 +52,7 @@ class ServiceChartController extends Controller
 
             DB::commit();
 
-            return response()->json(['message' => 'Service charts created successfully!', 'type' => 'success'], 200);
+            return response()->json(['message' => 'Service charts created successfully!', 'type' => 'success', 'serviceChart' => $serviceChart], 200);
         } catch (\Throwable $th) {
             return response()->json(['message' => $th->getMessage(), 'type' => 'error']);
         }
@@ -87,6 +87,9 @@ class ServiceChartController extends Controller
 
     public function destroy(ServiceChart $serviceChart)
     {
+        if ($serviceChart->serviceDetails()->exists()) {
+            return redirect()->back()->with('error', 'Cannot delete this service chart has related details.');
+        }
         $serviceChart->delete();
 
         return redirect()->back()->with('success', 'Service chart deleted successfully!');

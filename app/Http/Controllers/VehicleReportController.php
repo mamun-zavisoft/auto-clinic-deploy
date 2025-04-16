@@ -23,7 +23,7 @@ class VehicleReportController extends Controller
         // Get vehicles with owner_type information
         $vehicles = Vehicle::select('id', 'license_plate', 'owner_type')->get(); 
         
-        return view('backend.vehicles.report', get_defined_vars());
+        return view('backend.vehicles.report', ['title' => 'Vehicle Report'], get_defined_vars());
     }
 
     public function report(Request $request)

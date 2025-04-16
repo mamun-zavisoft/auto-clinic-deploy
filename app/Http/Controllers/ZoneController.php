@@ -26,7 +26,7 @@ class ZoneController extends Controller
             return view('components.zones.table', ['zones' => $zones])->render();
         }
 
-        return view('backend.zones.index', compact('zones'));
+        return view('backend.zones.index', ['title' => 'Zones'], compact('zones'));
 
     }
 
@@ -88,6 +88,11 @@ class ZoneController extends Controller
 
         if ($userCount > 0) {
             return redirect()->back()->with('error', 'Zone has users, cannot delete!');
+        }
+
+        if ($zone->racks()->exists())
+        {
+            return redirect()->back()->with('error', 'Zone has racks, cannot delete!');
         }
         $zone->delete();
 

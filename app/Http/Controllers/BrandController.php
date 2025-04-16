@@ -24,7 +24,7 @@ class BrandController extends Controller
             return view('components.brands.table', ['brands' => $brands])->render();
         }
 
-        return view('backend.brands.index', compact('brands'));
+        return view('backend.brands.index', ['title' => 'Brands'], compact('brands'));
     }
 
     public function store(Request $request)
@@ -75,9 +75,9 @@ class BrandController extends Controller
 
     public function destroy(Brand $brand)
     {
-        // if ($brand->products()->exists()) {
-        //     return response()->json(['message' => 'Brand has products, cannot delete!'], 422);
-        // }
+        if ($brand->products()->exists()) {
+            return redirect()->back()->with('error', 'Brand has products, cannot delete!');
+        }
         $brand->delete();
 
         return redirect()->back()->with('success', 'Brand deleted successfully!');

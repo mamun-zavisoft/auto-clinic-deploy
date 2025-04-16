@@ -137,8 +137,14 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title font-weight-bold mb-3">Supplier Info</h5>
-                                            <p class="mb-1">Supplier Name: {{ $purchase->supplier?->name }}</p>
-                                            <p class="mb-1">Supplier Number: {{ $purchase->supplier?->phone }}</p>
+                                            <p class="mb-1">Supplier Name:
+                                                <span class="fw-bolder ps-2"> {{ $purchase->supplier?->name }}
+                                                </span>
+                                            </p>
+                                            <p class="mb-1">Supplier Number: 
+                                                <span class="fw-bolder ps-2">{{ $purchase->supplier?->phone }}
+                                                </span>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -194,7 +200,7 @@
                                         <div class="d-flex border-bottom py-2">
                                             <div class="p-2" style="flex: 1;">{{ $data->product?->name }}</div>
                                             <div class="p-2" style="flex: 1;">{{ $data->quantity }}</div>
-                                            <div class="p-2" style="flex: 1;">{{ $data->product->purchase_price }}</div>
+                                            <div class="p-2" style="flex: 1;">{{ $data->product?->purchase_price }}</div>
                                             <div class="p-2" style="flex: 1;">{{ $data->product->sale_price }}</div>
                                             <div class="p-2" style="flex: 1;">{{ $data->quantity * $data->product->purchase_price }}</div> 
                                         </div>

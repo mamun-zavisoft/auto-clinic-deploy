@@ -36,7 +36,7 @@ class ServiceController extends Controller
             return view('components.services.table', ['services' => $services])->render();
         }
 
-        return view('backend.services.index', compact('services', 'serviceCharts', 'serviceDetails'));
+        return view('backend.services.index', ['title' => 'Services'], compact('services', 'serviceCharts', 'serviceDetails'));
     }
 
     /**
@@ -54,7 +54,7 @@ class ServiceController extends Controller
         // Fetch payment types Dynamically
         $paymentTypes = Service::getPaymentTypes();
 
-        return view('backend.services.create', compact('vehicles', 'serviceCharts', 'products', 'accounts', 'hubs', 'vehicleModels', 'paymentTypes'));
+        return view('backend.services.create', ['title' => 'Create Service'], compact('vehicles', 'serviceCharts', 'products', 'accounts', 'hubs', 'vehicleModels', 'paymentTypes'));
     }
 
     /**
@@ -91,7 +91,7 @@ class ServiceController extends Controller
             $owner_type = $request->service_type == 'self' ? '1' : '2';
 
             if ($vehicle && $vehicle->owner_type != $owner_type) {
-                return response()->json(['message' => 'Invalid vehicle selection!', 'type' => 'error'], 422);
+                return response()->json(['message' => 'Please select a vehicle that matches the service type!', 'type' => 'error'], 422);
             }
 
             DB::beginTransaction();

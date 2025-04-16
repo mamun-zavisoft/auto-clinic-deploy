@@ -30,7 +30,7 @@ class HubController extends Controller
             return view('components.hubs.table', ['hubs' => $hubs, 'zones' => $zones])->render();
         }
 
-        return view('backend.hubs.index', compact('hubs', 'zones'));
+        return view('backend.hubs.index', ['title' => 'Hubs'], compact('hubs', 'zones'));
     }
 
     public function store(Request $request)
@@ -118,7 +118,10 @@ class HubController extends Controller
 
     public function destroy(Hub $hub)
     {
-
+        if ($hub->vehicles()->exists()) 
+        {
+            return redirect()->back()->with('error', 'Hub has vehicles, cannot delete!');
+        }
         $hub->delete();
 
         return redirect()->back()->with('success', 'Hub deleted successfully!');

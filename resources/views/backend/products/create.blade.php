@@ -214,13 +214,11 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="col-lg-12">
@@ -407,7 +405,7 @@
                     $('#add-brand').modal('hide');
                     toastr.success(response.message);
                     setTimeout(() => {
-                        location.reload();
+                        window.location.href = response.redirect;
                     }, 1000);
                 } else {
                     toastr.error(response.message);
@@ -421,7 +419,7 @@
                         toastr.error(value);
                     });
                 }
-            });
+            })
         });
 
         $('#categoryStoreForm').on('submit', function (e) {
