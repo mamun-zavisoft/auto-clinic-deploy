@@ -98,10 +98,10 @@
                             <div class="graph-sets">
                                 <ul class="mb-0">
                                     <li>
-                                        <span>Sales</span>
+                                        <span>Purchase</span>
                                     </li>
                                     <li>
-                                        <span>Purchase</span>
+                                        <span>Sales</span>
                                     </li>
                                 </ul>
                                 <div class="dropdown dropdown-wraper">
