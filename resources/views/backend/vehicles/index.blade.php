@@ -5,8 +5,8 @@
         <div class="content">
             <x-breadcrumb-modal title="Vehicle List" sub-title="Manage Vehicle" permission="vehicle-create" button="Add Vehicle" modal-id="add-vehicle" />
 
-            <!-- Filter -->
             <div class="card table-list-card">
+                <!-- Filter -->
                     <x-filter>
                         <div class="col-lg-4 col-sm-3 col-12" style="width: 200px;">
                             <div class="mb-3 add-product">

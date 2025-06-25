@@ -7,10 +7,8 @@
             <th>Model</th>
             <th>Vehicle Type</th>
             <th>Hub</th>
-            <th>Reg.Date</th>
-            <th>Reg.Validity</th>
+            <th>Document Validity</th>
             <th>Status</th>
-            <th>Created On</th>
             @permission(['vehicle-show', 'vehicle-update', 'vehicle-delete'])
                 <th class="no-sort">Action</th>
             @endpermission
@@ -51,14 +49,51 @@
                     @endif
                 </td>
                 <td>{{ $vehicle->hub?->name ?? '-' }}</td>
-                <td>{{ $vehicle->registration_date ?? '-' }}</td>
-                <td>{{ $vehicle->registration_validity ?? '-' }}</td>
+                {{-- doc validity --}}
+                <td class="document-validity">
+                    @php
+                        $docStatuses = $vehicle->getDocumentStatuses();
+                        $documents = [
+                            'Registration' => ['date' => $vehicle->registration_validity, 'status' => $docStatuses['registration']],
+                            'Tax Token' => ['date' => $vehicle->tax_token_validity, 'status' => $docStatuses['tax_token']],
+                            'Fitness' => ['date' => $vehicle->fitness_validity, 'status' => $docStatuses['fitness']],
+                            'Road Permit' => ['date' => $vehicle->road_permit_validity, 'status' => $docStatuses['road_permit']],
+                            'Insurance' => ['date' => $vehicle->insurance_validity, 'status' => $docStatuses['insurance']],
+                        ];
+                    @endphp
 
+                    @foreach($documents as $docName => $docData)
+                    <div class="doc-item">
+                        <span class="doc-name">{{ $docName }}:</span>
+                        @if($docData['date'])
+                            <div class="doc-status">
+                                <span class="" style="font-size: 0.8rem;">
+                                    {{ \Carbon\Carbon::parse($docData['date'])->format('d-M-Y') }}
+                                </span>
+                                @if($docData['status']['status'] === 'expired')
+                                    <span class="status-badge status-expired">
+                                        Expired<span class="days-badge-danger">{{ $docData['status']['days'] }}</span> days ago
+                                    </span>
+                                @elseif($docData['status']['status'] === 'warning' && $docData['status']['days'] == 0)
+                                    <span class="status-badge status-warning">
+                                        Expires <b>Today</b>
+                                    </span>
+                                @elseif($docData['status']['status'] === 'warning')
+                                    <span class="status-badge status-warning">
+                                        Expires in<span class="days-badge-warning">{{ $docData['status']['days'] }}</span> days
+                                    </span>
+                                @endif
+                            </div>
+                        @else
+                            <span class="text-muted" style="font-size: 0.8rem;">-</span>
+                        @endif
+                    </div>
+                    @endforeach
+                </td>
                 <td><span
                         class="badge rounded-pill bg-outline-{{ $vehicle->status == 1 ? 'success' : 'warning' }}">{{ $vehicle->status == 1 ? 'Active' : 'In Service' }}</span>
                 </td>
-                <td>{{ $vehicle->created_at?->format('d M Y') }}</td>
-                <td class="action-table-data">
+                <td class="action-table-data" style="display: table-cell !important;">
                     <div class="edit-delete-action">
                         @permission('vehicle-show')
                             <a class="me-2 p-2" href="javascript:void(0);" data-bs-toggle="modal"
