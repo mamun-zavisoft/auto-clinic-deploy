@@ -267,16 +267,22 @@
                 let infoHtml = `
                     <div class="odo-info-card">
                         <div class="info-row">
-                            <span class="info-label">Last ODO:</span>
+                            <span class="info-label">Last ODO :</span>
                             <span class="info-value">${vehicle.current_odometer} KM</span>
                         </div>
                         <div class="info-row">
-                            <span class="info-label">Last Mileage:</span>
+                            <span class="info-label">Last Mileage :</span>
                             <span class="info-value">${vehicle.mileage} KM/L</span>
                         </div>
                         ${model_data ? `
                         <div class="info-row">
-                            <span class="info-label">Avg Mileage of (${model_data.name}):</span>
+                            <span class="info-label">Model :</span>
+                            <span class="info-value">${model_data.name}</span>
+                        </div>
+                        ` : ''}
+                        ${model_data ? `
+                        <div class="info-row">
+                            <span class="info-label">Avg Mileage :</span>
                             <span class="info-value">${model_data.avg_mileage} KM/L</span>
                         </div>
                         ` : ''}
