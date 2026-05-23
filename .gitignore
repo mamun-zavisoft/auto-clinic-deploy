@@ -20,4 +20,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-composer.lock
+composer.lockactions-runner/
+*.tar.gz
+actions-runner/
+*.tar.gz
