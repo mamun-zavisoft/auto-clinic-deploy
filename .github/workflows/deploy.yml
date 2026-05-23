@@ -92,7 +92,7 @@ jobs:
             sudo chown -R $USER:$USER "$APP_DIR"
 
             echo "Cloning repository..."
-            git clone https://github.com/mamun-zavisoft/cicd-test-zavisoft.git "$APP_DIR"
+            git clone https://github.com/mamun-zavisoft/auto-clinic-deploy.git "$APP_DIR"
 
             cd "$APP_DIR"
 
